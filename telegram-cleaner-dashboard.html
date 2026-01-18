@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Cleaner - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .chat-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .chat-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .chat-item:hover {
+            background: #f8f9fa;
+        }
+
+        .chat-item:last-child {
+            border-bottom: none;
+        }
+
+        .chat-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-type-badge {
+            font-size: 18px;
+        }
+
+        .chat-preview {
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-meta {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .message-count {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 3px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .selection-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #1976d2;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Scrollbar styling */
+        .chat-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [selectedChats, setSelectedChats] = useState(new Set([2]));
+            const [searchQuery, setSearchQuery] = useState('');
+            const [viewMode, setViewMode] = useState('all'); // 'all' or 'selected'
+
+            const chats = [
+                {
+                    id: 1,
+                    name: 'John Doe',
+                    type: 'private',
+                    avatar: 'JD',
+                    lastMessage: 'Hey, how are you doing?',
+                    messageCount: 245,
+                    time: '10:30 AM'
+                },
+                {
+                    id: 2,
+                    name: 'Tech News Group',
+                    type: 'group',
+                    avatar: 'TN',
+                    lastMessage: 'Check out this new AI tool!',
+                    messageCount: 1523,
+                    time: '11:45 AM'
+                },
+                {
+                    id: 3,
+                    name: 'Family Chat',
+                    type: 'group',
+                    avatar: 'FC',
+                    lastMessage: 'Dinner at 7 PM tonight!',
+                    messageCount: 892,
+                    time: 'Yesterday'
+                },
+                {
+                    id: 4,
+                    name: 'Work Projects',
+                    type: 'group',
+                    avatar: 'WP',
+                    lastMessage: 'Meeting rescheduled to 3 PM',
+                    messageCount: 2341,
+                    time: '1:15 PM'
+                },
+                {
+                    id: 5,
+                    name: 'Sarah Wilson',
+                    type: 'private',
+                    avatar: 'SW',
+                    lastMessage: 'Thanks for your help!',
+                    messageCount: 156,
+                    time: '2:20 PM'
+                },
+                {
+                    id: 6,
+                    name: 'Gaming Squad',
+                    type: 'group',
+                    avatar: 'GS',
+                    lastMessage: 'Anyone online for a match?',
+                    messageCount: 3421,
+                    time: '9:15 AM'
+                },
+                {
+                    id: 7,
+                    name: 'Mike Johnson',
+                    type: 'private',
+                    avatar: 'MJ',
+                    lastMessage: 'See you at the meeting',
+                    messageCount: 89,
+                    time: 'Monday'
+                },
+                {
+                    id: 8,
+                    name: 'Photography Club',
+                    type: 'group',
+                    avatar: 'PC',
+                    lastMessage: 'Amazing shots from today!',
+                    messageCount: 756,
+                    time: '4:30 PM'
+                },
+                {
+                    id: 9,
+                    name: 'Book Club',
+                    type: 'group',
+                    avatar: 'BC',
+                    lastMessage: 'Next meeting: Friday at 6 PM',
+                    messageCount: 234,
+                    time: 'Tuesday'
+                },
+                {
+                    id: 10,
+                    name: 'Emma Davis',
+                    type: 'private',
+                    avatar: 'ED',
+                    lastMessage: 'Thanks for the recommendation!',
+                    messageCount: 67,
+                    time: '3:45 PM'
+                }
+            ];
+
+            const toggleChatSelection = (chatId) => {
+                const newSelected = new Set(selectedChats);
+                if (newSelected.has(chatId)) {
+                    newSelected.delete(chatId);
+                } else {
+                    newSelected.add(chatId);
+                }
+                setSelectedChats(newSelected);
+            };
+
+            const selectAll = () => {
+                setSelectedChats(new Set(chats.map(c => c.id)));
+            };
+
+            const deselectAll = () => {
+                setSelectedChats(new Set());
+            };
+
+            const filteredChats = chats.filter(chat => {
+                const matchesSearch = chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase());
+                
+                if (viewMode === 'selected') {
+                    return matchesSearch && selectedChats.has(chat.id);
+                }
+                return matchesSearch;
+            });
+
+            const totalMessages = Array.from(selectedChats).reduce((sum, chatId) => {
+                const chat = chats.find(c => c.id === chatId);
+                return sum + (chat ? chat.messageCount : 0);
+            }, 0);
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🧹 Telegram Cleaner</h1>
+                        <p>Manage and clean your Telegram messages</p>
+                    </div>
+                    <div className="content">
+                        <div className="alert alert-info">
+                            <strong>✓ Connected:</strong> Logged in as +1234567890 • {chats.length} chats loaded
+                        </div>
+
+                        <div className="stats-bar">
+                            <div className="stat-item">
+                                <div className="stat-number">{chats.length}</div>
+                                <div className="stat-label">Total Chats</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-number">{selectedChats.size}</div>
+                                <div className="stat-label">Selected</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-number">{totalMessages.toLocaleString()}</div>
+                                <div className="stat-label">Messages to Delete</div>
+                            </div>
+                        </div>
+
+                        {selectedChats.size > 0 && (
+                            <div className="selection-info">
+                                <span>📋 {selectedChats.size} chat(s) selected with {totalMessages.toLocaleString()} total messages</span>
+                            </div>
+                        )}
+
+                        <div className="action-buttons">
+                            <button className="btn btn-secondary" onClick={selectAll}>
+                                ✓ Select All
+                            </button>
+                            <button className="btn btn-secondary" onClick={deselectAll}>
+                                ✗ Deselect All
+                            </button>
+                        </div>
+
+                        <div className="view-toggle">
+                            <button 
+                                className={`toggle-btn ${viewMode === 'all' ? 'active' : ''}`}
+                                onClick={() => setViewMode('all')}
+                            >
+                                All Chats ({chats.length})
+                            </button>
+                            <button 
+                                className={`toggle-btn ${viewMode === 'selected' ? 'active' : ''}`}
+                                onClick={() => setViewMode('selected')}
+                            >
+                                Selected Only ({selectedChats.size})
+                            </button>
+                        </div>
+
+                        <div className="search-box">
+                            <input 
+                                type="text" 
+                                placeholder="🔍 Search chats by name or message content..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="chat-list">
+                            {filteredChats.map(chat => (
+                                <div key={chat.id} className="chat-item">
+                                    <input 
+                                        type="checkbox" 
+                                        className="chat-checkbox"
+                                        checked={selectedChats.has(chat.id)}
+                                        onChange={() => toggleChatSelection(chat.id)}
+                                    />
+                                    <div className="chat-avatar">{chat.avatar}</div>
+                                    <div className="chat-info">
+                                        <div className="chat-name">
+                                            {chat.name}
+                                            <span className="chat-type-badge">
+                                                {chat.type === 'group' ? '👥' : '💬'}
+                                            </span>
+                                        </div>
+                                        <div className="chat-preview">{chat.lastMessage}</div>
+                                    </div>
+                                    <div className="chat-meta">
+                                        <div className="message-count">{chat.messageCount} msgs</div>
+                                        <div>{chat.time}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button 
+                            className="btn btn-danger" 
+                            disabled={selectedChats.size === 0}
+                            onClick={() => {
+                                if (confirm(`Delete all YOUR messages from ${selectedChats.size} selected chat(s)?\n\nTotal messages: ${totalMessages.toLocaleString()}\n\nThis cannot be undone!`)) {
+                                    alert('🗑️ Deletion started! This may take a few moments...');
+                                }
+                            }}
+                        >
+                            🗑️ Delete Selected Messages ({totalMessages.toLocaleString()})
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

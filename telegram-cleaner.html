@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Cleaner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .login-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .help-text a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        .instruction-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .instruction-box ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .instruction-box li {
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 20px;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .chat-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .chat-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .chat-item:hover {
+            background: #f8f9fa;
+        }
+
+        .chat-item:last-child {
+            border-bottom: none;
+        }
+
+        .chat-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .chat-info {
+            flex: 1;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .chat-preview {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .chat-meta {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .message-item {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .message-content {
+            flex: 1;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .message-date {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .selection-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            width: auto;
+            padding: 10px 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [phoneNumber, setPhoneNumber] = useState('');
+            const [cloudPassword, setCloudPassword] = useState('');
+            const [apiId, setApiId] = useState('');
+            const [apiHash, setApiHash] = useState('');
+            const [chats, setChats] = useState([]);
+            const [selectedChats, setSelectedChats] = useState(new Set());
+            const [selectedMessages, setSelectedMessages] = useState(new Set());
+            const [searchQuery, setSearchQuery] = useState('');
+            const [viewMode, setViewMode] = useState('chats'); // 'chats' or 'messages'
+            const [currentChat, setCurrentChat] = useState(null);
+
+            // Mock login function
+            const handleLogin = (e) => {
+                e.preventDefault();
+                
+                if (!phoneNumber || !apiId || !apiHash) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Simulate login and load mock data
+                setTimeout(() => {
+                    setIsLoggedIn(true);
+                    loadMockChats();
+                }, 1000);
+            };
+
+            // Load mock chat data
+            const loadMockChats = () => {
+                const mockChats = [
+                    {
+                        id: 1,
+                        name: 'John Doe',
+                        type: 'private',
+                        lastMessage: 'Hey, how are you doing?',
+                        messageCount: 245,
+                        messages: [
+                            { id: 101, text: 'Hey, how are you doing?', date: '2026-01-18 10:30' },
+                            { id: 102, text: 'Are we meeting tomorrow?', date: '2026-01-17 15:20' },
+                            { id: 103, text: 'I sent you the documents', date: '2026-01-16 09:15' },
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: 'Tech News Group',
+                        type: 'group',
+                        lastMessage: 'Check out this new AI tool!',
+                        messageCount: 1523,
+                        messages: [
+                            { id: 201, text: 'Check out this new AI tool!', date: '2026-01-18 11:45' },
+                            { id: 202, text: 'Anyone going to the conference?', date: '2026-01-18 08:30' },
+                            { id: 203, text: 'Great article about machine learning', date: '2026-01-17 20:10' },
+                        ]
+                    },
+                    {
+                        id: 3,
+                        name: 'Family Chat',
+                        type: 'group',
+                        lastMessage: 'Dinner at 7 PM tonight!',
+                        messageCount: 892,
+                        messages: [
+                            { id: 301, text: 'Dinner at 7 PM tonight!', date: '2026-01-18 12:00' },
+                            { id: 302, text: 'Can someone pick up groceries?', date: '2026-01-17 16:45' },
+                            { id: 303, text: 'Happy birthday mom! 🎉', date: '2026-01-15 09:00' },
+                        ]
+                    },
+                    {
+                        id: 4,
+                        name: 'Work Projects',
+                        type: 'group',
+                        lastMessage: 'Meeting rescheduled to 3 PM',
+                        messageCount: 2341,
+                        messages: [
+                            { id: 401, text: 'Meeting rescheduled to 3 PM', date: '2026-01-18 13:15' },
+                            { id: 402, text: 'Project deadline extended', date: '2026-01-17 14:30' },
+                            { id: 403, text: 'Please review the proposal', date: '2026-01-16 11:20' },
+                        ]
+                    },
+                    {
+                        id: 5,
+                        name: 'Sarah Wilson',
+                        type: 'private',
+                        lastMessage: 'Thanks for your help!',
+                        messageCount: 156,
+                        messages: [
+                            { id: 501, text: 'Thanks for your help!', date: '2026-01-18 14:20' },
+                            { id: 502, text: 'Can you send me the files?', date: '2026-01-17 10:15' },
+                            { id: 503, text: 'See you tomorrow', date: '2026-01-16 18:45' },
+                        ]
+                    }
+                ];
+                setChats(mockChats);
+            };
+
+            // Toggle chat selection
+            const toggleChatSelection = (chatId) => {
+                const newSelected = new Set(selectedChats);
+                if (newSelected.has(chatId)) {
+                    newSelected.delete(chatId);
+                } else {
+                    newSelected.add(chatId);
+                }
+                setSelectedChats(newSelected);
+            };
+
+            // Toggle message selection
+            const toggleMessageSelection = (messageId) => {
+                const newSelected = new Set(selectedMessages);
+                if (newSelected.has(messageId)) {
+                    newSelected.delete(messageId);
+                } else {
+                    newSelected.add(messageId);
+                }
+                setSelectedMessages(newSelected);
+            };
+
+            // View messages in a chat
+            const viewChatMessages = (chat) => {
+                setCurrentChat(chat);
+                setViewMode('messages');
+                setSelectedMessages(new Set());
+            };
+
+            // Select all messages in current chat
+            const selectAllMessages = () => {
+                if (currentChat) {
+                    const allMessageIds = new Set(currentChat.messages.map(m => m.id));
+                    setSelectedMessages(allMessageIds);
+                }
+            };
+
+            // Filter chats/messages based on search
+            const filteredChats = chats.filter(chat => 
+                chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            const filteredMessages = currentChat ? 
+                currentChat.messages.filter(msg => 
+                    msg.text.toLowerCase().includes(searchQuery.toLowerCase())
+                ) : [];
+
+            // Delete selected items
+            const handleDelete = () => {
+                if (viewMode === 'chats') {
+                    if (selectedChats.size === 0) {
+                        alert('Please select at least one chat');
+                        return;
+                    }
+                    
+                    const confirmed = window.confirm(
+                        `Are you sure you want to delete all messages from ${selectedChats.size} chat(s)? This action cannot be undone.`
+                    );
+                    
+                    if (confirmed) {
+                        // In a real app, this would call the Telegram API
+                        alert(`Successfully deleted messages from ${selectedChats.size} chat(s)`);
+                        setSelectedChats(new Set());
+                    }
+                } else {
+                    if (selectedMessages.size === 0) {
+                        alert('Please select at least one message');
+                        return;
+                    }
+                    
+                    const confirmed = window.confirm(
+                        `Are you sure you want to delete ${selectedMessages.size} message(s)? This action cannot be undone.`
+                    );
+                    
+                    if (confirmed) {
+                        // In a real app, this would call the Telegram API
+                        alert(`Successfully deleted ${selectedMessages.size} message(s)`);
+                        setSelectedMessages(new Set());
+                    }
+                }
+            };
+
+            if (!isLoggedIn) {
+                return (
+                    <div className="container">
+                        <div className="header">
+                            <h1>🧹 Telegram Cleaner</h1>
+                            <p>Clean up your Telegram messages easily</p>
+                        </div>
+                        <div className="content">
+                            <form className="login-form" onSubmit={handleLogin}>
+                                <div className="form-group">
+                                    <label>Phone Number *</label>
+                                    <input 
+                                        type="tel" 
+                                        placeholder="+1234567890"
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                        required
+                                    />
+                                    <p className="help-text">Enter your phone number with country code</p>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Cloud Password</label>
+                                    <input 
+                                        type="password" 
+                                        placeholder="Your 2FA password (if enabled)"
+                                        value={cloudPassword}
+                                        onChange={(e) => setCloudPassword(e.target.value)}
+                                    />
+                                    <p className="help-text">Only required if you have Two-Step Verification enabled</p>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>API ID *</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Your API ID"
+                                        value={apiId}
+                                        onChange={(e) => setApiId(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>API Hash *</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Your API Hash"
+                                        value={apiHash}
+                                        onChange={(e) => setApiHash(e.target.value)}
+                                        required
+                                    />
+                                    <p className="help-text">
+                                        Get your API credentials from{' '}
+                                        <a href="https://my.telegram.org/apps" target="_blank" rel="noopener noreferrer">
+                                            my.telegram.org/apps
+                                        </a>
+                                    </p>
+                                    
+                                    <div className="instruction-box">
+                                        <strong>How to get API credentials:</strong>
+                                        <ol>
+                                            <li>Visit <a href="https://my.telegram.org/apps" target="_blank">my.telegram.org/apps</a></li>
+                                            <li>Log in with your phone number</li>
+                                            <li>Fill in the application details (any name will work)</li>
+                                            <li>Copy your <strong>api_id</strong> and <strong>api_hash</strong></li>
+                                            <li>Paste them in the fields above</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <button type="submit" className="btn">
+                                    Login to Telegram
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🧹 Telegram Cleaner</h1>
+                        <p>Manage and clean your Telegram messages</p>
+                    </div>
+                    <div className="content">
+                        <div className="alert alert-info">
+                            <strong>Demo Mode:</strong> This is a demonstration with mock data. In a real implementation, 
+                            this would connect to the Telegram API to manage your actual messages.
+                        </div>
+
+                        {viewMode === 'messages' && (
+                            <button className="btn back-btn" onClick={() => setViewMode('chats')}>
+                                ← Back to Chats
+                            </button>
+                        )}
+
+                        <div className="search-box">
+                            <input 
+                                type="text" 
+                                placeholder={viewMode === 'chats' ? "Search chats..." : "Search messages..."}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+
+                        {viewMode === 'chats' ? (
+                            <>
+                                {selectedChats.size > 0 && (
+                                    <div className="selection-info">
+                                        {selectedChats.size} chat(s) selected
+                                    </div>
+                                )}
+
+                                <div className="chat-list">
+                                    {filteredChats.length === 0 ? (
+                                        <div className="empty-state">
+                                            <p>No chats found</p>
+                                        </div>
+                                    ) : (
+                                        filteredChats.map(chat => (
+                                            <div key={chat.id} className="chat-item">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="chat-checkbox"
+                                                    checked={selectedChats.has(chat.id)}
+                                                    onChange={() => toggleChatSelection(chat.id)}
+                                                />
+                                                <div className="chat-info" onClick={() => viewChatMessages(chat)} style={{cursor: 'pointer'}}>
+                                                    <div className="chat-name">
+                                                        {chat.name}
+                                                        {chat.type === 'group' && ' 👥'}
+                                                    </div>
+                                                    <div className="chat-preview">{chat.lastMessage}</div>
+                                                </div>
+                                                <div className="chat-meta">
+                                                    {chat.messageCount} messages
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {currentChat && (
+                                    <>
+                                        <div style={{marginBottom: '15px'}}>
+                                            <h3 style={{color: '#333', marginBottom: '10px'}}>
+                                                {currentChat.name}
+                                            </h3>
+                                            <button 
+                                                className="btn" 
+                                                style={{width: 'auto', padding: '8px 16px', fontSize: '14px'}}
+                                                onClick={selectAllMessages}
+                                            >
+                                                Select All Messages
+                                            </button>
+                                        </div>
+
+                                        {selectedMessages.size > 0 && (
+                                            <div className="selection-info">
+                                                {selectedMessages.size} message(s) selected
+                                            </div>
+                                        )}
+
+                                        <div className="chat-list">
+                                            {filteredMessages.length === 0 ? (
+                                                <div className="empty-state">
+                                                    <p>No messages found</p>
+                                                </div>
+                                            ) : (
+                                                filteredMessages.map(message => (
+                                                    <div key={message.id} className="message-item">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            className="message-checkbox"
+                                                            checked={selectedMessages.has(message.id)}
+                                                            onChange={() => toggleMessageSelection(message.id)}
+                                                        />
+                                                        <div className="message-content">
+                                                            {message.text}
+                                                            <div className="message-date">{message.date}</div>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </>
+                        )}
+
+                        <button className="btn btn-danger" onClick={handleDelete}>
+                            🗑️ Delete Selected
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

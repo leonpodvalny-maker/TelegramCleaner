@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Cleaner - Search Results</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0088cc;
+            --primary-light: #40b3f0;
+            --primary-dark: #006ba8;
+            --secondary: #8e44ad;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --highlight: #ffd700;
+            --dark: #1a1d29;
+            --dark-light: #252836;
+            --dark-lighter: #2f3347;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a3bd;
+            --text-muted: #6c6f8a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a1d29 0%, #252836 50%, #1a1d29 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 136, 204, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(142, 68, 173, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(46, 204, 113, 0.08) 0%, transparent 60%);
+            animation: drift 30s infinite ease-in-out alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes drift {
+            to {
+                transform: translate(10%, 10%) rotate(5deg);
+            }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px var(--shadow);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--success);
+            margin-bottom: 24px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+            }
+            50% {
+                opacity: 0.7;
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--dark-lighter);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            background: var(--dark-lighter);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 136, 204, 0.15);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(0, 136, 204, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .clear-search:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        .search-results-info {
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(142, 68, 173, 0.15));
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideInRight 0.4s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .search-info-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--warning), var(--highlight));
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .selection-banner {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(0, 136, 204, 0.2));
+            border: 1px solid var(--success);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideInRight 0.4s ease-out;
+        }
+
+        .selection-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--dark-lighter);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark-light);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .chat-list {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 8px;
+        }
+
+        .chat-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-item {
+            margin-bottom: 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--dark-lighter);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .chat-item.has-matches {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .chat-item:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .chat-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .chat-header.expanded {
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.05), rgba(142, 68, 173, 0.05));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .checkbox {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .checkbox:checked {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+        }
+
+        .checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .match-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--highlight);
+            margin-left: 8px;
+        }
+
+        .chat-meta {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .message-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            padding: 4px 12px;
+            background: rgba(0, 136, 204, 0.1);
+            border-radius: 8px;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .expand-icon {
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .messages-container {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            animation: expandDown 0.3s ease-out;
+        }
+
+        @keyframes expandDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        .message-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .message-controls .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .messages-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .messages-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .messages-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .message-item {
+            padding: 16px;
+            background: var(--dark-light);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .message-item.has-match {
+            border-color: rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(243, 156, 18, 0.05));
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+        }
+
+        .message-item:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .message-item.selected {
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(142, 68, 173, 0.15));
+            border-color: var(--primary);
+        }
+
+        .message-checkbox {
+            margin-top: 2px;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-text {
+            color: var(--text-primary);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .message-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .message-type.photo {
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--success);
+        }
+
+        .message-type.video {
+            background: rgba(0, 136, 204, 0.15);
+            color: var(--primary-light);
+        }
+
+        .message-type.file {
+            background: rgba(243, 156, 18, 0.15);
+            color: var(--warning);
+        }
+
+        .message-sender {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-results-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .no-results-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .no-results-text {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+        }
+
+        .badge {
+            font-size: 18px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [expandedChat, setExpandedChat] = useState(2);
+            const [selectedChats, setSelectedChats] = useState(new Set());
+            const [selectedMessages, setSelectedMessages] = useState(new Set([202]));
+            const [searchQuery, setSearchQuery] = useState('conference');
+
+            const chats = [
+                {
+                    id: 1,
+                    name: 'John Doe',
+                    type: 'private',
+                    avatar: 'JD',
+                    lastMessage: 'Hey, how are you doing?',
+                    messageCount: 245,
+                    time: '10:30 AM',
+                    messages: [
+                        { id: 101, text: 'Hey, how are you doing?', date: '2026-01-18 10:30', sender: 'You', type: 'text' },
+                        { id: 102, text: 'Are we meeting tomorrow?', date: '2026-01-17 15:20', sender: 'You', type: 'text' },
+                        { id: 103, text: 'I sent you the documents', date: '2026-01-16 09:15', sender: 'You', type: 'file' },
+                    ]
+                },
+                {
+                    id: 2,
+                    name: 'Tech News Group',
+                    type: 'group',
+                    avatar: 'TN',
+                    lastMessage: 'Check out this new AI tool!',
+                    messageCount: 1523,
+                    time: '11:45 AM',
+                    messages: [
+                        { id: 201, text: 'Check out this new AI tool!', date: '2026-01-18 11:45', sender: 'You', type: 'text' },
+                        { id: 202, text: 'Anyone going to the conference next week?', date: '2026-01-18 08:30', sender: 'You', type: 'text' },
+                        { id: 203, text: 'Great article about machine learning trends', date: '2026-01-17 20:10', sender: 'You', type: 'text' },
+                        { id: 204, text: 'Here are some photos from the meetup', date: '2026-01-17 16:45', sender: 'You', type: 'photo' },
+                        { id: 205, text: 'Does anyone have experience with this framework?', date: '2026-01-16 12:00', sender: 'You', type: 'text' },
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'Family Chat',
+                    type: 'group',
+                    avatar: 'FC',
+                    lastMessage: 'Dinner at 7 PM tonight!',
+                    messageCount: 892,
+                    time: 'Yesterday',
+                    messages: [
+                        { id: 301, text: 'Dinner at 7 PM tonight!', date: '2026-01-18 12:00', sender: 'You', type: 'text' },
+                        { id: 302, text: 'Can someone pick up groceries?', date: '2026-01-17 16:45', sender: 'You', type: 'text' },
+                    ]
+                },
+                {
+                    id: 4,
+                    name: 'Work Projects',
+                    type: 'group',
+                    avatar: 'WP',
+                    lastMessage: 'Meeting rescheduled to 3 PM',
+                    messageCount: 2341,
+                    time: '1:15 PM',
+                    messages: [
+                        { id: 401, text: 'Meeting rescheduled to 3 PM', date: '2026-01-18 13:15', sender: 'You', type: 'text' },
+                        { id: 402, text: 'Project deadline extended', date: '2026-01-17 14:30', sender: 'You', type: 'text' },
+                    ]
+                }
+            ];
+
+            const highlightText = (text, query) => {
+                if (!query) return text;
+                const parts = text.split(new RegExp(`(${query})`, 'gi'));
+                return parts.map((part, index) => 
+                    part.toLowerCase() === query.toLowerCase() 
+                        ? <span key={index} className="highlight">{part}</span>
+                        : part
+                );
+            };
+
+            const getMatchingMessages = (chat) => {
+                if (!searchQuery) return [];
+                return chat.messages.filter(msg => 
+                    msg.text.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            };
+
+            const toggleChatExpansion = (chatId) => {
+                setExpandedChat(expandedChat === chatId ? null : chatId);
+            };
+
+            const toggleChatSelection = (chatId) => {
+                const newSelected = new Set(selectedChats);
+                if (newSelected.has(chatId)) {
+                    newSelected.delete(chatId);
+                } else {
+                    newSelected.add(chatId);
+                }
+                setSelectedChats(newSelected);
+            };
+
+            const toggleMessageSelection = (messageId) => {
+                const newSelected = new Set(selectedMessages);
+                if (newSelected.has(messageId)) {
+                    newSelected.delete(messageId);
+                } else {
+                    newSelected.add(messageId);
+                }
+                setSelectedMessages(newSelected);
+            };
+
+            const selectAllMessagesInChat = (chatId) => {
+                const chat = chats.find(c => c.id === chatId);
+                if (chat) {
+                    const newSelected = new Set(selectedMessages);
+                    chat.messages.forEach(msg => newSelected.add(msg.id));
+                    setSelectedMessages(newSelected);
+                }
+            };
+
+            const deselectAllMessagesInChat = (chatId) => {
+                const chat = chats.find(c => c.id === chatId);
+                if (chat) {
+                    const newSelected = new Set(selectedMessages);
+                    chat.messages.forEach(msg => newSelected.delete(msg.id));
+                    setSelectedMessages(newSelected);
+                }
+            };
+
+            const clearSearch = () => {
+                setSearchQuery('');
+            };
+
+            const filteredChats = chats.filter(chat => {
+                const nameMatch = chat.name.toLowerCase().includes(searchQuery.toLowerCase());
+                const messageMatch = chat.messages.some(msg => 
+                    msg.text.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+                return nameMatch || messageMatch;
+            });
+
+            const totalMatches = filteredChats.reduce((sum, chat) => {
+                return sum + getMatchingMessages(chat).length;
+            }, 0);
+
+            const totalSelectedMessages = selectedMessages.size;
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>✨ Telegram Cleaner</h1>
+                        <p>Clean up your messages with style</p>
+                    </div>
+
+                    <div className="glass-card">
+                        <div className="status-badge">
+                            <span className="status-dot"></span>
+                            Connected as +1234567890
+                        </div>
+
+                        <div className="stats-grid">
+                            <div className="stat-card">
+                                <div className="stat-number">{filteredChats.length}</div>
+                                <div className="stat-label">Matching Chats</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">{totalMatches}</div>
+                                <div className="stat-label">Messages Found</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">{totalSelectedMessages}</div>
+                                <div className="stat-label">Selected</div>
+                            </div>
+                        </div>
+
+                        <div className="search-container">
+                            <span className="search-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                className="search-input"
+                                placeholder="Search chats or messages..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            {searchQuery && (
+                                <button className="clear-search" onClick={clearSearch}>
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+
+                        {searchQuery && (
+                            <div className="search-results-info">
+                                <div className="search-info-text">
+                                    <span>🎯</span>
+                                    <span>
+                                        Found <strong>{totalMatches}</strong> message{totalMatches !== 1 ? 's' : ''} 
+                                        {' '}containing "<span className="highlight">{searchQuery}</span>" 
+                                        {' '}in <strong>{filteredChats.length}</strong> chat{filteredChats.length !== 1 ? 's' : ''}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {totalSelectedMessages > 0 && (
+                            <div className="selection-banner">
+                                <div className="selection-info">
+                                    <span>✓</span>
+                                    <span>{totalSelectedMessages} message{totalSelectedMessages !== 1 ? 's' : ''} selected for deletion</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {filteredChats.length > 0 ? (
+                            <>
+                                <div className="chat-list">
+                                    {filteredChats.map(chat => {
+                                        const matchingMessages = getMatchingMessages(chat);
+                                        const hasMatches = matchingMessages.length > 0;
+                                        
+                                        return (
+                                            <div key={chat.id} className={`chat-item ${hasMatches ? 'has-matches' : ''}`}>
+                                                <div className={`chat-header ${expandedChat === chat.id ? 'expanded' : ''}`}>
+                                                    <div className="checkbox-wrapper">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            className="checkbox"
+                                                            checked={selectedChats.has(chat.id)}
+                                                            onChange={(e) => {
+                                                                e.stopPropagation();
+                                                                toggleChatSelection(chat.id);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="avatar">{chat.avatar}</div>
+                                                    <div 
+                                                        className="chat-info"
+                                                        onClick={() => toggleChatExpansion(chat.id)}
+                                                    >
+                                                        <div className="chat-name">
+                                                            {highlightText(chat.name, searchQuery)}
+                                                            <span className="badge">
+                                                                {chat.type === 'group' ? '👥' : '💬'}
+                                                            </span>
+                                                            {hasMatches && (
+                                                                <span className="match-badge">
+                                                                    ⚡ {matchingMessages.length} match{matchingMessages.length !== 1 ? 'es' : ''}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="chat-preview">{highlightText(chat.lastMessage, searchQuery)}</div>
+                                                    </div>
+                                                    <div className="chat-meta">
+                                                        <div className="message-count">{chat.messageCount}</div>
+                                                        <div className="chat-time">{chat.time}</div>
+                                                        <span className={`expand-icon ${expandedChat === chat.id ? 'expanded' : ''}`}>
+                                                            ▼
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                {expandedChat === chat.id && (
+                                                    <div className="messages-container">
+                                                        <div className="message-controls">
+                                                            <button 
+                                                                className="btn btn-primary"
+                                                                onClick={() => selectAllMessagesInChat(chat.id)}
+                                                            >
+                                                                ✓ Select All ({chat.messages.length})
+                                                            </button>
+                                                            <button 
+                                                                className="btn btn-secondary"
+                                                                onClick={() => deselectAllMessagesInChat(chat.id)}
+                                                            >
+                                                                ✗ Deselect All
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div className="messages-list">
+                                                            {chat.messages.map(message => {
+                                                                const messageHasMatch = searchQuery && 
+                                                                    message.text.toLowerCase().includes(searchQuery.toLowerCase());
+                                                                
+                                                                return (
+                                                                    <div 
+                                                                        key={message.id} 
+                                                                        className={`message-item ${selectedMessages.has(message.id) ? 'selected' : ''} ${messageHasMatch ? 'has-match' : ''}`}
+                                                                    >
+                                                                        <div className="checkbox-wrapper">
+                                                                            <input 
+                                                                                type="checkbox" 
+                                                                                className="checkbox message-checkbox"
+                                                                                checked={selectedMessages.has(message.id)}
+                                                                                onChange={() => toggleMessageSelection(message.id)}
+                                                                            />
+                                                                        </div>
+                                                                        <div className="message-content">
+                                                                            <div className="message-text">
+                                                                                {message.type !== 'text' && (
+                                                                                    <span className={`message-type ${message.type}`}>
+                                                                                        {message.type === 'photo' && '📷 Photo'}
+                                                                                        {message.type === 'video' && '🎥 Video'}
+                                                                                        {message.type === 'file' && '📎 File'}
+                                                                                    </span>
+                                                                                )}
+                                                                                {highlightText(message.text, searchQuery)}
+                                                                            </div>
+                                                                            <div className="message-meta">
+                                                                                <span className="message-sender">{message.sender}</span>
+                                                                                <span>•</span>
+                                                                                <span>{message.date}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                <button 
+                                    className="btn btn-danger" 
+                                    disabled={totalSelectedMessages === 0}
+                                    onClick={() => {
+                                        if (confirm(`Delete ${totalSelectedMessages} selected message(s)?\n\nThis cannot be undone!`)) {
+                                            alert('🗑️ Deletion started! This may take a few moments...');
+                                        }
+                                    }}
+                                >
+                                    🗑️ Delete {totalSelectedMessages} Message{totalSelectedMessages !== 1 ? 's' : ''}
+                                </button>
+                            </>
+                        ) : (
+                            <div className="no-results">
+                                <div className="no-results-icon">🔍</div>
+                                <div className="no-results-title">No results found</div>
+                                <div className="no-results-text">
+                                    Try different keywords or check your spelling
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
