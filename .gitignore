@@ -34,6 +34,17 @@ credentials.json
 dist/
 build/
 
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aab
+*.keystore
+
+# Capacitor
+www/
+
 # Temporary files
 *.tmp
 .cache/

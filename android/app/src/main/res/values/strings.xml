@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Telegram Cleaner</string>
+    <string name="title_activity_main">Telegram Cleaner</string>
+    <string name="package_name">com.telegramcleaner.app</string>
+    <string name="custom_url_scheme">com.telegramcleaner.app</string>
+</resources>
