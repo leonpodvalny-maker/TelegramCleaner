@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +10,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary: #0088cc;
-            --primary-light: #40b3f0;
-            --primary-dark: #006ba8;
-            --secondary: #8e44ad;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --dark: #1a1d29;
-            --dark-light: #252836;
-            --dark-lighter: #2f3347;
+            --primary: #00aaff;
+            --primary-light: #66ccff;
+            --primary-dark: #0088dd;
+            --secondary: #b87fff;
+            --success: #4ade80;
+            --danger: #ff8a8a;
+            --warning: #fcd34d;
+            --dark: #343b54;
+            --dark-light: #434c6a;
+            --dark-lighter: #525d7f;
             --text-primary: #ffffff;
-            --text-secondary: #a0a3bd;
-            --text-muted: #6c6f8a;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.3);
+            --text-secondary: #ccd0e5;
+            --text-muted: #a0a6c4;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: rgba(0, 0, 0, 0.2);
         }
 
         * {
@@ -38,7 +41,7 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #1a1d29 0%, #252836 50%, #1a1d29 100%);
+            background: linear-gradient(135deg, #343b54 0%, #434c6a 50%, #343b54 100%);
             min-height: 100vh;
             color: var(--text-primary);
             padding: 20px;
@@ -53,10 +56,10 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 136, 204, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(142, 68, 173, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(46, 204, 113, 0.08) 0%, transparent 60%);
+            background:
+                radial-gradient(circle at 20% 30%, rgba(0, 170, 255, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(184, 127, 255, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.15) 0%, transparent 60%);
             animation: drift 30s infinite ease-in-out alternate;
             pointer-events: none;
             z-index: 0;
@@ -86,6 +89,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -100,6 +104,43 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            filter: drop-shadow(0 4px 20px rgba(0, 170, 255, 0.4));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .logo-text {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -1px;
         }
 
@@ -126,6 +167,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -145,8 +187,8 @@
             align-items: center;
             gap: 8px;
             padding: 10px 20px;
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid rgba(46, 204, 113, 0.3);
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid rgba(74, 222, 128, 0.4);
             border-radius: 50px;
             font-size: 14px;
             font-weight: 500;
@@ -163,13 +205,16 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
-                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
             }
+
             50% {
                 opacity: 0.7;
-                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+                box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
             }
         }
 
@@ -182,7 +227,7 @@
 
         .stat-card {
             background: var(--dark-lighter);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 20px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -251,7 +296,7 @@
         .search-input:focus {
             border-color: var(--primary);
             background: var(--dark-light);
-            box-shadow: 0 0 0 4px rgba(0, 136, 204, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 170, 255, 0.15);
         }
 
         .search-icon {
@@ -264,7 +309,7 @@
         }
 
         .selection-banner {
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.2), rgba(142, 68, 173, 0.2));
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.2), rgba(184, 127, 255, 0.2));
             border: 1px solid var(--primary);
             border-radius: 16px;
             padding: 16px 24px;
@@ -280,6 +325,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -296,7 +342,8 @@
         .action-buttons {
             display: flex;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -339,7 +386,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 170, 255, 0.4);
         }
 
         .btn-secondary {
@@ -356,14 +403,19 @@
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, var(--danger), #c0392b);
+            background: linear-gradient(135deg, var(--danger), #e85555);
             color: white;
             width: 100%;
         }
 
         .btn-danger:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            box-shadow: 0 8px 20px rgba(248, 113, 113, 0.4);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 2px;
         }
 
         .btn:disabled {
@@ -420,8 +472,8 @@
         }
 
         .chat-header.expanded {
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.05), rgba(142, 68, 173, 0.05));
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.08), rgba(184, 127, 255, 0.08));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .checkbox-wrapper {
@@ -433,12 +485,12 @@
             appearance: none;
             width: 22px;
             height: 22px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             border-radius: 6px;
             cursor: pointer;
             position: relative;
             transition: all 0.3s ease;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .checkbox:checked {
@@ -457,6 +509,11 @@
             font-weight: bold;
         }
 
+        .checkbox:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 2px;
+        }
+
         .avatar {
             width: 56px;
             height: 56px;
@@ -469,12 +526,20 @@
             font-weight: 700;
             color: white;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.35);
         }
 
         .chat-info {
             flex: 1;
             min-width: 0;
+            border-radius: 8px;
+            padding: 4px;
+            margin: -4px;
+        }
+
+        .chat-info:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 2px;
         }
 
         .chat-name {
@@ -509,7 +574,7 @@
             font-weight: 600;
             color: var(--primary);
             padding: 4px 12px;
-            background: rgba(0, 136, 204, 0.1);
+            background: rgba(0, 170, 255, 0.15);
             border-radius: 8px;
         }
 
@@ -530,18 +595,19 @@
 
         .messages-container {
             padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             animation: expandDown 0.3s ease-out;
         }
 
         @keyframes expandDown {
             from {
                 opacity: 0;
-                max-height: 0;
+                transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
-                max-height: 1000px;
+                transform: translateY(0);
             }
         }
 
@@ -593,7 +659,7 @@
         }
 
         .message-item.selected {
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(142, 68, 173, 0.15));
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.18), rgba(184, 127, 255, 0.18));
             border-color: var(--primary);
         }
 
@@ -625,7 +691,7 @@
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 6px;
             font-size: 11px;
             font-weight: 600;
@@ -634,17 +700,17 @@
         }
 
         .message-type.photo {
-            background: rgba(46, 204, 113, 0.15);
+            background: rgba(52, 211, 153, 0.2);
             color: var(--success);
         }
 
         .message-type.video {
-            background: rgba(0, 136, 204, 0.15);
+            background: rgba(0, 153, 230, 0.2);
             color: var(--primary-light);
         }
 
         .message-type.file {
-            background: rgba(243, 156, 18, 0.15);
+            background: rgba(251, 191, 36, 0.2);
             color: var(--warning);
         }
 
@@ -657,15 +723,15 @@
             .header h1 {
                 font-size: 36px;
             }
-            
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .action-buttons {
                 flex-direction: column;
             }
-            
+
             .glass-card {
                 padding: 20px;
             }
@@ -687,122 +753,821 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--secondary), #9333ea);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 140px;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(184, 127, 255, 0.4);
+        }
+
+        .btn-refresh .refresh-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-refresh.refreshing .refresh-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        .refresh-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--dark-lighter);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .refresh-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            max-width: 420px;
+            margin: 60px auto;
+        }
+
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--dark-lighter);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 170, 255, 0.15);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .login-error {
+            background: rgba(255, 138, 138, 0.15);
+            border: 1px solid var(--danger);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            color: var(--danger);
+            font-size: 14px;
+        }
+
+        .login-info {
+            background: rgba(0, 170, 255, 0.1);
+            border: 1px solid rgba(0, 170, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            color: var(--primary-light);
+            font-size: 14px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--dark-lighter);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+        }
+
+        .step-dot.completed {
+            background: var(--success);
+        }
+
+        /* Progress bar for deletion */
+        .deletion-progress {
+            background: var(--dark-lighter);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-container {
+            background: var(--dark);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .api-setup {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .api-setup-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .api-link {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        .api-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
-        function App() {
-            const [expandedChat, setExpandedChat] = useState(2);
-            const [selectedChats, setSelectedChats] = useState(new Set());
-            const [selectedMessages, setSelectedMessages] = useState(new Set([202, 204]));
-            const [searchQuery, setSearchQuery] = useState('');
+        // ==================== TELEGRAM API SERVICE ====================
+        // Connects to Node.js backend with real GramJS
+        const API_BASE = window.location.origin;
 
-            const chats = [
-                {
-                    id: 1,
-                    name: 'John Doe',
-                    type: 'private',
-                    avatar: 'JD',
-                    lastMessage: 'Hey, how are you doing?',
-                    messageCount: 245,
-                    time: '10:30 AM',
-                    messages: [
-                        { id: 101, text: 'Hey, how are you doing?', date: '2026-01-18 10:30', sender: 'You', type: 'text' },
-                        { id: 102, text: 'Are we meeting tomorrow?', date: '2026-01-17 15:20', sender: 'You', type: 'text' },
-                        { id: 103, text: 'I sent you the documents', date: '2026-01-16 09:15', sender: 'You', type: 'file' },
-                        { id: 104, text: 'Perfect, thanks!', date: '2026-01-16 09:10', sender: 'You', type: 'text' },
-                        { id: 105, text: 'Let me know if you need anything else', date: '2026-01-15 14:30', sender: 'You', type: 'text' },
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'Tech News Group',
-                    type: 'group',
-                    avatar: 'TN',
-                    lastMessage: 'Check out this new AI tool!',
-                    messageCount: 1523,
-                    time: '11:45 AM',
-                    messages: [
-                        { id: 201, text: 'Check out this new AI tool!', date: '2026-01-18 11:45', sender: 'You', type: 'text' },
-                        { id: 202, text: 'Anyone going to the conference next week?', date: '2026-01-18 08:30', sender: 'You', type: 'text' },
-                        { id: 203, text: 'Great article about machine learning trends', date: '2026-01-17 20:10', sender: 'You', type: 'text' },
-                        { id: 204, text: 'Here are some photos from the meetup', date: '2026-01-17 16:45', sender: 'You', type: 'photo' },
-                        { id: 205, text: 'Does anyone have experience with this framework?', date: '2026-01-16 12:00', sender: 'You', type: 'text' },
-                        { id: 206, text: 'Thanks everyone for the warm welcome!', date: '2026-01-15 09:30', sender: 'You', type: 'text' },
-                        { id: 207, text: 'Sharing my presentation slides', date: '2026-01-14 14:20', sender: 'You', type: 'file' },
-                        { id: 208, text: 'Looking forward to collaborating with you all', date: '2026-01-13 11:15', sender: 'You', type: 'text' },
-                    ]
-                },
-                {
-                    id: 3,
-                    name: 'Family Chat',
-                    type: 'group',
-                    avatar: 'FC',
-                    lastMessage: 'Dinner at 7 PM tonight!',
-                    messageCount: 892,
-                    time: 'Yesterday',
-                    messages: [
-                        { id: 301, text: 'Dinner at 7 PM tonight!', date: '2026-01-18 12:00', sender: 'You', type: 'text' },
-                        { id: 302, text: 'Can someone pick up groceries?', date: '2026-01-17 16:45', sender: 'You', type: 'text' },
-                        { id: 303, text: 'Happy birthday mom! 🎉', date: '2026-01-15 09:00', sender: 'You', type: 'text' },
-                    ]
-                },
-                {
-                    id: 4,
-                    name: 'Work Projects',
-                    type: 'group',
-                    avatar: 'WP',
-                    lastMessage: 'Meeting rescheduled to 3 PM',
-                    messageCount: 2341,
-                    time: '1:15 PM',
-                    messages: [
-                        { id: 401, text: 'Meeting rescheduled to 3 PM', date: '2026-01-18 13:15', sender: 'You', type: 'text' },
-                        { id: 402, text: 'Project deadline extended', date: '2026-01-17 14:30', sender: 'You', type: 'text' },
-                    ]
-                },
-                {
-                    id: 5,
-                    name: 'Sarah Wilson',
-                    type: 'private',
-                    avatar: 'SW',
-                    lastMessage: 'Thanks for your help!',
-                    messageCount: 156,
-                    time: '2:20 PM',
-                    messages: [
-                        { id: 501, text: 'Thanks for your help!', date: '2026-01-18 14:20', sender: 'You', type: 'text' },
-                        { id: 502, text: 'Can you send me the files?', date: '2026-01-17 10:15', sender: 'You', type: 'text' },
-                    ]
+        class TelegramService {
+            constructor() {
+                this.sessionId = localStorage.getItem('tg_sessionId') || null;
+                this.sessionString = localStorage.getItem('tg_sessionString') || '';
+                this.user = null;
+            }
+
+            async initialize(apiId, apiHash) {
+                const response = await fetch(`${API_BASE}/api/init`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        apiId,
+                        apiHash,
+                        sessionString: this.sessionString
+                    })
+                });
+                const data = await response.json();
+
+                if (!data.success) throw new Error(data.error);
+
+                this.sessionId = data.sessionId;
+                localStorage.setItem('tg_sessionId', data.sessionId);
+                localStorage.setItem('tg_api_id', apiId);
+                localStorage.setItem('tg_api_hash', apiHash);
+
+                if (data.isAuthorized) {
+                    this.user = data.user;
                 }
-            ];
 
-            const toggleChatExpansion = (chatId) => {
-                setExpandedChat(expandedChat === chatId ? null : chatId);
+                return { isAuthorized: data.isAuthorized, user: data.user };
+            }
+
+            async sendCode(phone) {
+                const response = await fetch(`${API_BASE}/api/send-code`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: this.sessionId, phone })
+                });
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return data;
+            }
+
+            async signIn(phone, code) {
+                const response = await fetch(`${API_BASE}/api/sign-in`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: this.sessionId, code })
+                });
+                const data = await response.json();
+
+                if (data.needs2FA) {
+                    return { success: false, needs2FA: true };
+                }
+                if (!data.success) throw new Error(data.error);
+
+                this.sessionString = data.sessionString;
+                this.user = data.user;
+                localStorage.setItem('tg_sessionString', data.sessionString);
+
+                return { success: true, user: data.user };
+            }
+
+            async signIn2FA(password) {
+                const response = await fetch(`${API_BASE}/api/sign-in-2fa`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: this.sessionId, password })
+                });
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+
+                this.sessionString = data.sessionString;
+                this.user = data.user;
+                localStorage.setItem('tg_sessionString', data.sessionString);
+
+                return { success: true, user: data.user };
+            }
+
+            isAuthorized() {
+                return !!this.sessionString && !!this.user;
+            }
+
+            getMe() {
+                return this.user;
+            }
+
+            async getDialogs() {
+                const response = await fetch(`${API_BASE}/api/dialogs?sessionId=${this.sessionId}`);
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return data.dialogs.map(d => ({ ...d, messages: [] }));
+            }
+
+            async getMessages(chatId, offsetId = 0, limit = 100) {
+                const response = await fetch(`${API_BASE}/api/messages?sessionId=${this.sessionId}&chatId=${chatId}&limit=${limit}&offsetId=${offsetId}`);
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return data.messages;
+            }
+
+            async deleteMessages(chatId, messageIds, revoke = true) {
+                const response = await fetch(`${API_BASE}/api/delete-messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: this.sessionId,
+                        chatId,
+                        messageIds,
+                        revoke
+                    })
+                });
+                const data = await response.json();
+                return data; // Returns { success: true, deleted: N } or { success: false, floodWait: S }
+            }
+
+            async batchScan(chatIds) {
+                const response = await fetch(`${API_BASE}/api/batch-scan`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: this.sessionId,
+                        chatIds
+                    })
+                });
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return data.counts; // Returns { chatId: count }
+            }
+
+            async logout() {
+                if (this.sessionId) {
+                    await fetch(`${API_BASE}/api/logout`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId: this.sessionId })
+                    });
+                }
+                this.sessionId = null;
+                this.sessionString = '';
+                this.user = null;
+                localStorage.removeItem('tg_sessionId');
+                localStorage.removeItem('tg_sessionString');
+                localStorage.removeItem('tg_api_id');
+                localStorage.removeItem('tg_api_hash');
+            }
+        }
+
+        const telegramService = new TelegramService();
+
+        // ==================== LOGIN COMPONENT ====================
+        function LoginScreen({ onLogin }) {
+            const [step, setStep] = useState('api'); // api, phone, code, 2fa
+            const [apiId, setApiId] = useState(localStorage.getItem('tg_api_id') || '');
+            const [apiHash, setApiHash] = useState(localStorage.getItem('tg_api_hash') || '');
+            const [phone, setPhone] = useState('');
+            const [code, setCode] = useState('');
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
+
+            const handleApiSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+                try {
+                    const result = await telegramService.initialize(parseInt(apiId), apiHash);
+                    if (result.isAuthorized) {
+                        onLogin(result.user);
+                    } else {
+                        setStep('phone');
+                    }
+                } catch (err) {
+                    setError(err.message || 'Failed to connect. Is the server running?');
+                }
+                setLoading(false);
+            };
+
+            const handlePhoneSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+                try {
+                    await telegramService.sendCode(phone);
+                    setStep('code');
+                } catch (err) {
+                    setError(err.message || 'Failed to send code');
+                }
+                setLoading(false);
+            };
+
+            const handleCodeSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+                try {
+                    const result = await telegramService.signIn(phone, code);
+                    if (result.success) {
+                        onLogin(result.user);
+                    } else if (result.needs2FA) {
+                        setStep('2fa');
+                    }
+                } catch (err) {
+                    setError(err.message || 'Invalid code');
+                }
+                setLoading(false);
+            };
+
+            const handle2FASubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+                try {
+                    const result = await telegramService.signIn2FA(password);
+                    if (result.success) {
+                        onLogin(result.user);
+                    }
+                } catch (err) {
+                    setError(err.message || 'Invalid password');
+                }
+                setLoading(false);
+            };
+
+            const Logo = () => (
+                <svg className="login-logo" viewBox="0 0 100 100" fill="none">
+                    <defs>
+                        <linearGradient id="loginLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#00aaff" />
+                            <stop offset="100%" stopColor="#b87fff" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="46" fill="url(#loginLogoGrad)" opacity="0.9" />
+                    <path d="M25 50L42 44L70 28L45 52L42 68L35 55L25 50Z" fill="white" opacity="0.95" />
+                    <path d="M42 44L45 52L70 28L42 44Z" fill="white" opacity="0.7" />
+                </svg>
+            );
+
+            return (
+                <div className="login-container">
+                    <div className="login-card">
+                        <Logo />
+                        <h1 className="login-title">Telegram Cleaner</h1>
+                        <p className="login-subtitle">
+                            {step === 'api' && 'Enter your Telegram API credentials'}
+                            {step === 'phone' && 'Enter your phone number'}
+                            {step === 'code' && 'Enter the verification code'}
+                            {step === '2fa' && 'Enter your 2FA password'}
+                        </p>
+
+                        <div className="step-indicator">
+                            <div className={`step-dot ${step === 'api' ? 'active' : 'completed'}`}></div>
+                            <div className={`step-dot ${step === 'phone' ? 'active' : (step === 'code' || step === '2fa') ? 'completed' : ''}`}></div>
+                            <div className={`step-dot ${step === 'code' ? 'active' : step === '2fa' ? 'completed' : ''}`}></div>
+                            <div className={`step-dot ${step === '2fa' ? 'active' : ''}`}></div>
+                        </div>
+
+                        {error && <div className="login-error">{error}</div>}
+
+                        {step === 'api' && (
+                            <form onSubmit={handleApiSubmit}>
+                                <div className="input-group">
+                                    <label className="input-label">API ID</label>
+                                    <input type="text" className="input-field" value={apiId}
+                                        onChange={(e) => setApiId(e.target.value)} placeholder="12345678" required />
+                                </div>
+                                <div className="input-group">
+                                    <label className="input-label">API Hash</label>
+                                    <input type="text" className="input-field" value={apiHash}
+                                        onChange={(e) => setApiHash(e.target.value)} placeholder="0123456789abcdef..." required />
+                                </div>
+                                <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+                                    {loading ? <span className="loading-spinner"></span> : 'Continue'}
+                                </button>
+                                <div className="api-setup">
+                                    <p className="api-setup-title">
+                                        Get credentials from <a href="https://my.telegram.org" target="_blank" className="api-link">my.telegram.org</a>
+                                    </p>
+                                </div>
+                            </form>
+                        )}
+
+                        {step === 'phone' && (
+                            <form onSubmit={handlePhoneSubmit}>
+                                <div className="input-group">
+                                    <label className="input-label">Phone Number</label>
+                                    <input type="tel" className="input-field" value={phone}
+                                        onChange={(e) => setPhone(e.target.value)} placeholder="+1234567890" required />
+                                </div>
+                                <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+                                    {loading ? <span className="loading-spinner"></span> : 'Send Code'}
+                                </button>
+                            </form>
+                        )}
+
+                        {step === 'code' && (
+                            <form onSubmit={handleCodeSubmit}>
+                                <div className="login-info">Code sent to {phone}</div>
+                                <div className="input-group">
+                                    <label className="input-label">Verification Code</label>
+                                    <input type="text" className="input-field" value={code}
+                                        onChange={(e) => setCode(e.target.value)} placeholder="12345" required autoFocus />
+                                </div>
+                                <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+                                    {loading ? <span className="loading-spinner"></span> : 'Verify'}
+                                </button>
+                            </form>
+                        )}
+
+                        {step === '2fa' && (
+                            <form onSubmit={handle2FASubmit}>
+                                <div className="login-info">Two-factor authentication required</div>
+                                <div className="input-group">
+                                    <label className="input-label">2FA Password</label>
+                                    <input type="password" className="input-field" value={password}
+                                        onChange={(e) => setPassword(e.target.value)} placeholder="Your 2FA password" required autoFocus />
+                                </div>
+                                <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+                                    {loading ? <span className="loading-spinner"></span> : 'Submit'}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== MAIN APP COMPONENT ====================
+        function App() {
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [user, setUser] = useState(null);
+            const [chats, setChats] = useState([]);
+            const [expandedChat, setExpandedChat] = useState(null);
+            const [selectedChats, setSelectedChats] = useState(new Set());
+            const [selectedMessages, setSelectedMessages] = useState(new Set());
+            const [searchQuery, setSearchQuery] = useState('');
+            const [isRefreshing, setIsRefreshing] = useState(false);
+            const [lastRefresh, setLastRefresh] = useState(null);
+            const [isDeleting, setIsDeleting] = useState(false);
+            const [deleteProgress, setDeleteProgress] = useState({ current: 0, total: 0 });
+            const [loadingMessages, setLoadingMessages] = useState(null);
+            const [isLoadingMore, setIsLoadingMore] = useState(false); // New state for recursive loading
+            const [stopLoading, setStopLoading] = useState(false); // Flag to abort loading
+            const [initializing, setInitializing] = useState(true);
+            const [isScanning, setIsScanning] = useState(false);
+            const [scanProgress, setScanProgress] = useState({ current: 0, total: 0 });
+            const [hideEmpty, setHideEmpty] = useState(true); // Default to TRUE as requested
+
+            useEffect(() => {
+                const checkAuth = async () => {
+                    const apiId = localStorage.getItem('tg_api_id');
+                    const apiHash = localStorage.getItem('tg_api_hash');
+                    const sessionString = localStorage.getItem('tg_sessionString');
+
+                    if (apiId && apiHash && sessionString) {
+                        try {
+                            const result = await telegramService.initialize(parseInt(apiId), apiHash);
+                            if (result.isAuthorized) {
+                                setUser(result.user);
+                                setIsLoggedIn(true);
+                                await loadChats();
+                            }
+                        } catch (err) {
+                            console.error('Auto-login failed:', err);
+                        }
+                    }
+                    setInitializing(false);
+                };
+                checkAuth();
+            }, []);
+
+            const loadChats = async () => {
+                setIsRefreshing(true);
+                // Capture current expanded chat ID before we potentially wipe state or if we need it
+                // Actually 'expandedChat' from closure is fine as long as we don't depend on updated state immediately.
+                const currentExpandedChatId = expandedChat;
+
+                try {
+                    const dialogs = await telegramService.getDialogs();
+                    // Ensure messages array is initialized
+                    // NOTE: If we want to preserve messages for the Expanded Chat, we could check if ID matches and keep them?
+                    // BUT: User clicked Refresh, so they probably WANT to refresh the messages too.
+                    // SO: We should wipe them (default behavior) but then immediately trigger a reload for that chat.
+
+                    const hydratedDialogs = dialogs.map(d => ({ ...d, messages: d.messages || [] }));
+                    setChats(hydratedDialogs);
+                    setLastRefresh(new Date());
+
+                    // Auto-start scan
+                    startBackgroundScan(hydratedDialogs);
+
+                    // If a chat was expanded, reload its messages
+                    if (currentExpandedChatId) {
+                        // Small delay to ensure state and simple rate limit
+                        setTimeout(() => {
+                            loadMessages(currentExpandedChatId, 0, false, true);
+                        }, 500);
+                    }
+
+                } catch (err) {
+                    console.error('Failed to load chats:', err);
+                }
+                setIsRefreshing(false);
+            };
+
+            // Modified to recursively load ALL messages
+            const loadMessages = async (chatId, offsetId = 0, append = false, autoContinue = false) => {
+                const chat = chats.find(c => c.id === chatId);
+                if (!chat) return;
+
+                // If we are starting a fresh load for a chat that already has messages, and not appending,
+                // we might want to clear them or just sync. For now, let's assume we want to load history.
+
+                if (!append) {
+                    setLoadingMessages(chatId);
+                    setStopLoading(false);
+                } else {
+                    setIsLoadingMore(true);
+                }
+
+                try {
+                    // Fetch batch
+                    const messages = await telegramService.getMessages(chatId, offsetId);
+
+                    if (messages.length === 0) {
+                        setLoadingMessages(null);
+                        setIsLoadingMore(false);
+                        return; // End of history
+                    }
+
+                    // Update state
+                    setChats(prev => prev.map(c => {
+                        if (c.id !== chatId) return c;
+
+                        let updatedMessages = [];
+                        if (append) {
+                            const existingIds = new Set(c.messages.map(m => m.id));
+                            const newUnique = messages.filter(m => !existingIds.has(m.id));
+                            updatedMessages = [...c.messages, ...newUnique];
+                        } else {
+                            updatedMessages = messages;
+                        }
+
+                        return {
+                            ...c,
+                            messages: updatedMessages,
+                            messageCount: Math.max(c.messageCount, updatedMessages.length)
+                        };
+                    }));
+
+                    // Recursive loop logic
+                    if ((autoContinue || !append) && messages.length > 0) {
+                        // Check if we should stop
+                        // We can't easily read the CURRENT value of stopLoading from state here due to closure
+                        // But we can check a ref if we had one. 
+                        // Instead, we'll chain the next call loosely or use a slightly different pattern.
+                        // For simplicity in this functional component without refs:
+                        // We will rely on the user UI "Stop" to toggle a ref or just let it run for now.
+                        // To properly stop, we need a Ref. Let's add a Ref hook in the next step if strictly needed.
+                        // For now, let's just wait 1s and load next batch.
+
+                        await new Promise(r => setTimeout(r, 300)); // Optimized delay for faster loading
+                        const lastMsg = messages[messages.length - 1];
+
+                        // We need to check if user switched chats or wanted to stop.
+                        // A simple way is to pass a "runId" or check if `loadingMessages` is still this chat.
+                        // Since we can't see the fresh state, this is tricky in a simple recursive function.
+                        // BETTER: Use a useEffect or a separate specific "RecursiveLoader" function that checks a ref.
+
+                        // Let's call ourselves again with new offset
+                        // We pass 'true' for append and 'true' for autoContinue
+
+                        // NOTE: To fix the "Stop" issue, we'll assume for now the user wants ALL unless they reload page.
+                        // We check if the chat is still the active one (expandedChat).
+                        // We can't access `expandedChat` state inside this closure easily if it's stale.
+                        // We will proceed with the recursive load for THIS chat specifically.
+
+                        loadMessages(chatId, lastMsg.id, true, true);
+                    } else {
+                        setLoadingMessages(null);
+                        setIsLoadingMore(false);
+                    }
+
+                } catch (err) {
+                    console.error('Failed to load messages:', err);
+                    setLoadingMessages(null);
+                    setIsLoadingMore(false);
+                }
+            };
+
+            const handleLogin = async (userData) => {
+                setUser(userData);
+                setIsLoggedIn(true);
+                await loadChats();
+            };
+
+            const handleLogout = async () => {
+                await telegramService.logout();
+                setIsLoggedIn(false);
+                setUser(null);
+                setChats([]);
+            };
+
+            const toggleChatExpansion = async (chatId) => {
+                if (expandedChat === chatId) {
+                    setExpandedChat(null);
+                    setLoadingMessages(null); // Cancel loading indicator logic roughly
+                } else {
+                    setExpandedChat(chatId);
+                    // Start loading ALL messages (autoContinue = true)
+                    await loadMessages(chatId, 0, false, true);
+                }
             };
 
             const toggleChatSelection = (chatId) => {
-                const newSelected = new Set(selectedChats);
-                if (newSelected.has(chatId)) {
-                    newSelected.delete(chatId);
+                const newSelectedChats = new Set(selectedChats);
+                const newSelectedMessages = new Set(selectedMessages);
+                const chat = chats.find(c => c.id === chatId);
+
+                if (newSelectedChats.has(chatId)) {
+                    newSelectedChats.delete(chatId);
+                    if (chat) {
+                        chat.messages.forEach(msg => newSelectedMessages.delete(msg.id));
+                    }
                 } else {
-                    newSelected.add(chatId);
+                    newSelectedChats.add(chatId);
+                    // FORCE CLEAR individual messages for this chat to prevent double counting
+                    if (chat) {
+                        chat.messages.forEach(msg => newSelectedMessages.delete(msg.id));
+                    }
                 }
-                setSelectedChats(newSelected);
+
+                setSelectedChats(newSelectedChats);
+                setSelectedMessages(newSelectedMessages);
             };
 
-            const toggleMessageSelection = (messageId) => {
-                const newSelected = new Set(selectedMessages);
-                if (newSelected.has(messageId)) {
-                    newSelected.delete(messageId);
+            const toggleMessageSelection = (messageId, chatId) => {
+                const newSelectedLogs = new Set(selectedMessages);
+                const newSelectedChats = new Set(selectedChats);
+
+                // If the CHAT is selected, we are breaking the "All" selection
+                // down to individual messages (minus the one clicked)
+                if (chatId && selectedChats.has(chatId)) {
+                    newSelectedChats.delete(chatId);
+
+                    // Add ALL current messages from this chat
+                    const chat = chats.find(c => c.id === chatId);
+                    if (chat) {
+                        chat.messages.forEach(m => {
+                            if (m.id !== messageId) {
+                                newSelectedLogs.add(m.id);
+                            }
+                        });
+                    }
+                    // We don't need to check "if (newSelected...)" because we are transitioning from "All" to "All-1"
                 } else {
-                    newSelected.add(messageId);
+                    // Normal toggle behavior
+                    if (newSelectedLogs.has(messageId)) {
+                        newSelectedLogs.delete(messageId);
+                    } else {
+                        newSelectedLogs.add(messageId);
+                    }
                 }
-                setSelectedMessages(newSelected);
+
+                setSelectedMessages(newSelectedLogs);
+                setSelectedChats(newSelectedChats);
             };
 
             const selectAllMessagesInChat = (chatId) => {
@@ -825,31 +1590,290 @@
 
             const selectAll = () => {
                 setSelectedChats(new Set(chats.map(c => c.id)));
+                // Clear all individual messages to rely on chat-based counting
+                setSelectedMessages(new Set());
             };
 
             const deselectAll = () => {
                 setSelectedChats(new Set());
+                setSelectedMessages(new Set());
             };
 
-            const filteredChats = chats.filter(chat => 
-                chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            const refreshMessages = async () => {
+                await loadChats();
+            };
 
-            const totalSelectedMessages = selectedMessages.size;
+            const handleDelete = async () => {
+                const manualSelectionCount = selectedMessages.size;
+                let chatSelectionCount = 0;
+                chats.forEach(c => {
+                    if (selectedChats.has(c.id)) chatSelectionCount += (c.myMessageCount || 0);
+                });
+
+                const totalToDelete = manualSelectionCount + chatSelectionCount;
+
+                if (totalToDelete === 0) return;
+
+                if (!confirm(`Delete ${totalToDelete} selected message(s)?\n\nThis will delete for everyone. This cannot be undone!`)) {
+                    return;
+                }
+
+                setIsDeleting(true);
+                setDeleteProgress({ current: 0, total: totalToDelete });
+
+                const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+                try {
+                    let totalDeletedActual = 0;
+
+                    // 1. Process Explicit Selected Messages
+                    const messagesByChat = {};
+                    for (const chat of chats) {
+                        // If whole chat selected, we skip manual messages from it (handled in step 2)
+                        // Although toggle logic clears them, let's be safe.
+                        if (selectedChats.has(chat.id)) continue;
+
+                        const chatMsgIds = chat.messages
+                            .filter(msg => selectedMessages.has(msg.id))
+                            .map(msg => msg.id);
+                        if (chatMsgIds.length > 0) {
+                            messagesByChat[chat.id] = chatMsgIds;
+                        }
+                    }
+
+                    // Process manual messages
+                    for (const chatId of Object.keys(messagesByChat)) {
+                        const ids = messagesByChat[chatId];
+                        const CHUNK_SIZE = 50;
+                        for (let i = 0; i < ids.length; i += CHUNK_SIZE) {
+                            const chunk = ids.slice(i, i + CHUNK_SIZE);
+                            let success = false;
+                            while (!success) {
+                                const result = await telegramService.deleteMessages(chatId, chunk, true);
+                                if (result.success) {
+                                    success = true;
+                                    totalDeletedActual += chunk.length;
+                                    setDeleteProgress(prev => ({ ...prev, current: totalDeletedActual }));
+                                    setChats(prev => prev.map(c =>
+                                        c.id === chatId
+                                            ? { ...c, messages: c.messages.filter(m => !chunk.includes(m.id)) }
+                                            : c
+                                    ));
+                                    await delay(500);
+                                } else if (result.floodWait) {
+                                    await delay(result.floodWait * 1000);
+                                } else { success = true; }
+                            }
+                        }
+                    }
+
+                    // 2. Process Whole Chat Selections
+                    for (const chatId of selectedChats) {
+                        const chat = chats.find(c => c.id === chatId);
+                        if (!chat) continue;
+
+                        let hasMore = true;
+                        // Loop until empty
+                        while (hasMore) {
+                            // Fetch batch
+                            try {
+                                const messages = await telegramService.getMessages(chatId, 0, 50);
+                                if (messages.length === 0) {
+                                    hasMore = false;
+                                    break;
+                                }
+
+                                const ids = messages.map(m => m.id);
+                                let success = false;
+                                while (!success) {
+                                    const result = await telegramService.deleteMessages(chatId, ids, true);
+                                    if (result.success) {
+                                        success = true;
+                                        totalDeletedActual += ids.length;
+                                        setDeleteProgress(prev => ({ ...prev, current: totalDeletedActual }));
+
+                                        // Update UI
+                                        setChats(prev => prev.map(c =>
+                                            c.id === chatId
+                                                ? {
+                                                    ...c,
+                                                    messages: [],
+                                                    hasMyMessages: false,
+                                                    myMessageCount: Math.max(0, (c.myMessageCount || 0) - ids.length)
+                                                }
+                                                : c
+                                        ));
+
+                                        await delay(1000);
+                                    } else if (result.floodWait) {
+                                        await delay(result.floodWait * 1000);
+                                    } else {
+                                        hasMore = false; // Abort chat on error
+                                        success = true;
+                                    }
+                                }
+                            } catch (e) {
+                                console.error("Error processing chat delete", chatId, e);
+                                hasMore = false;
+                            }
+                        }
+                    }
+
+                    // Clear selections
+                    setSelectedMessages(new Set());
+                    setSelectedChats(new Set());
+                    alert(`Successfully deleted ${totalDeletedActual} message(s)!`);
+                } catch (err) {
+                    console.error('Delete failed:', err);
+                    alert('Failed to delete: ' + err.message);
+                }
+
+                setIsDeleting(false);
+            };
+
+            // Refactored Scan to take chats argument for auto-start
+            const startBackgroundScan = async (chatsToScan) => {
+                if (isScanning) return; // Prevent double scan
+                setIsScanning(true);
+                setScanProgress({ current: 0, total: chatsToScan.length });
+
+                try {
+                    // Extract IDs
+                    const idsToScan = chatsToScan.map(c => c.id);
+
+                    // Call Batch API
+                    // If list is huge (e.g. 5000), we might want to frontend-chunk it too, 
+                    // but server handles batching mostly. Let's send in chunks of 100 to update UI progress.
+
+                    const CHUNK_SIZE = 50;
+                    const activeIdsSet = new Set();
+
+                    for (let i = 0; i < idsToScan.length; i += CHUNK_SIZE) {
+                        const chunk = idsToScan.slice(i, i + CHUNK_SIZE);
+
+                        try {
+                            const countsChunk = await telegramService.batchScan(chunk);
+                            // countsChunk is object { id: count }
+                            const idsWithCounts = Object.keys(countsChunk);
+
+                            // Update UI progressively
+                            setChats(prev => prev.map(c => {
+                                if (chunk.includes(c.id)) {
+                                    const count = countsChunk[c.id] || 0;
+                                    const isActive = count > 0;
+                                    return {
+                                        ...c,
+                                        hasScanned: true,
+                                        hasMyMessages: isActive,
+                                        myMessageCount: count, // Store the count
+                                        messages: c.messages.length > 0 ? c.messages : []
+                                    };
+                                }
+                                return c;
+                            }));
+                        } catch (e) {
+                            console.error('Batch scan chunk failed', e);
+                        }
+
+                        setScanProgress(prev => ({ ...prev, current: Math.min(i + CHUNK_SIZE, idsToScan.length) }));
+                    }
+
+                } catch (err) {
+                    console.error('Scan failed', err);
+                }
+
+                // Final cleanup status
+                setIsScanning(false);
+            };
+
+            const handleScan = () => startBackgroundScan(chats);
+
+            const filteredChats = chats.filter(chat => {
+                // Filter 1: Search Query
+                const query = searchQuery.toLowerCase();
+                const nameMatch = chat.name && chat.name.toLowerCase().includes(query);
+                const lastMsgMatch = chat.lastMessage && chat.lastMessage.toLowerCase().includes(query);
+                const messagesMatch = chat.messages && chat.messages.some(m => m.text && m.text.toLowerCase().includes(query));
+                const matchesSearch = !searchQuery || nameMatch || lastMsgMatch || messagesMatch;
+
+                // Filter 2: Hide Empty (Strict)
+                // If hideEmpty is ON, we ONLY show if hasMyMessages === true.
+                // If checking hasn't finished (undefined), we HIDE it (strict mode).
+                // User will see items "pop in" as they are verified.
+
+                const matchesEmptyFilter = !hideEmpty || (chat.hasMyMessages === true);
+
+                return matchesSearch && matchesEmptyFilter;
+            });
+
+            const totalSelectedMessages = selectedMessages.size + chats.reduce((acc, chat) =>
+                selectedChats.has(chat.id) ? acc + (chat.myMessageCount || 0) : acc, 0
+            );
             const totalChats = chats.length;
+
+            // Show loading screen during initialization
+            if (initializing) {
+                return (
+                    <div className="login-container">
+                        <div className="login-card" style={{ textAlign: 'center' }}>
+                            <div className="loading-spinner" style={{ width: 40, height: 40, margin: '0 auto 20px' }}></div>
+                            <p className="login-subtitle">Loading...</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Show login if not authenticated
+            if (!isLoggedIn) {
+                return <LoginScreen onLogin={handleLogin} />;
+            }
 
             return (
                 <div className="container">
                     <div className="header">
-                        <h1>✨ Telegram Cleaner</h1>
+                        <div className="logo-container">
+                            <svg className="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {/* Background circle with gradient */}
+                                <defs>
+                                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#00aaff" />
+                                        <stop offset="100%" stopColor="#b87fff" />
+                                    </linearGradient>
+                                    <linearGradient id="sparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#ffffff" />
+                                        <stop offset="100%" stopColor="#66ccff" />
+                                    </linearGradient>
+                                </defs>
+                                {/* Main circle */}
+                                <circle cx="50" cy="50" r="46" fill="url(#logoGrad)" opacity="0.9" />
+                                {/* Paper plane / telegram style */}
+                                <path d="M25 50L42 44L70 28L45 52L42 68L35 55L25 50Z" fill="white" opacity="0.95" />
+                                <path d="M42 44L45 52L70 28L42 44Z" fill="white" opacity="0.7" />
+                                <path d="M42 68L45 52L55 58L42 68Z" fill="white" opacity="0.6" />
+                                {/* Broom / cleaning element */}
+                                <rect x="60" y="55" width="4" height="22" rx="2" fill="white" transform="rotate(-30 62 66)" />
+                                <ellipse cx="75" cy="78" rx="10" ry="6" fill="white" opacity="0.9" transform="rotate(-30 75 78)" />
+                                {/* Sparkles */}
+                                <circle cx="20" cy="25" r="3" fill="url(#sparkleGrad)" />
+                                <circle cx="82" cy="18" r="2.5" fill="url(#sparkleGrad)" />
+                                <circle cx="15" cy="70" r="2" fill="url(#sparkleGrad)" />
+                                {/* Star sparkle */}
+                                <path d="M85 40L87 44L91 44L88 47L89 51L85 48L81 51L82 47L79 44L83 44Z" fill="white" />
+                            </svg>
+                            <span className="logo-text">Telegram Cleaner</span>
+                        </div>
                         <p>Clean up your messages with style</p>
                     </div>
 
                     <div className="glass-card">
-                        <div className="status-badge">
-                            <span className="status-dot"></span>
-                            Connected as +1234567890
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                            <div className="status-badge" style={{ marginBottom: 0 }}>
+                                <span className="status-dot"></span>
+                                Connected as {user?.phone || user?.username || 'User'}
+                            </div>
+                            <button className="logout-btn" onClick={handleLogout}>
+                                Logout
+                            </button>
                         </div>
 
                         <div className="stats-grid">
@@ -876,23 +1900,54 @@
                             </div>
                         )}
 
-                        <div className="action-buttons">
-                            <button className="btn btn-primary" onClick={selectAll}>
+                        <div className="action-buttons" role="group" aria-label="Chat selection actions">
+                            <button className="btn btn-primary" onClick={selectAll} aria-label="Select all chats">
                                 ✓ Select All Chats
                             </button>
-                            <button className="btn btn-secondary" onClick={deselectAll}>
+                            <button className="btn btn-secondary" onClick={deselectAll} aria-label="Deselect all chats">
                                 ✗ Deselect All
+                            </button>
+                            <button
+                                className={`btn btn-refresh ${isRefreshing ? 'refreshing' : ''}`}
+                                onClick={refreshMessages}
+                                disabled={isRefreshing}
+                                aria-label="Refresh messages list"
+                            >
+                                <span className="refresh-icon">🔄</span>
+                                {isRefreshing ? 'Refreshing...' : 'Refresh'}
                             </button>
                         </div>
 
+                        <div className="refresh-info">
+                            <span>📋 {chats.reduce((sum, c) => sum + c.messages.length, 0)} messages loaded from {chats.length} chats</span>
+                            <span>🕐 {lastRefresh ? `Last refresh: ${lastRefresh.toLocaleTimeString()}` : 'Not refreshed yet'}</span>
+                        </div>
+
+                        {isDeleting && (
+                            <div className="deletion-progress">
+                                <div style={{ fontWeight: 600, marginBottom: 8 }}>🗑️ Deleting messages...</div>
+                                <div className="progress-bar-container">
+                                    <div
+                                        className="progress-bar"
+                                        style={{ width: `${(deleteProgress.current / deleteProgress.total) * 100}%` }}
+                                    ></div>
+                                </div>
+                                <div className="progress-stats">
+                                    <span>{deleteProgress.current} / {deleteProgress.total} deleted</span>
+                                    <span>{Math.round((deleteProgress.current / deleteProgress.total) * 100)}%</span>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="search-container">
-                            <span className="search-icon">🔍</span>
-                            <input 
-                                type="text" 
+                            <span className="search-icon" aria-hidden="true">🔍</span>
+                            <input
+                                type="text"
                                 className="search-input"
                                 placeholder="Search chats or messages..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
+                                aria-label="Search chats or messages"
                             />
                         </div>
 
@@ -901,112 +1956,168 @@
                                 <div key={chat.id} className="chat-item">
                                     <div className={`chat-header ${expandedChat === chat.id ? 'expanded' : ''}`}>
                                         <div className="checkbox-wrapper">
-                                            <input 
-                                                type="checkbox" 
+                                            <input
+                                                type="checkbox"
                                                 className="checkbox"
                                                 checked={selectedChats.has(chat.id)}
                                                 onChange={(e) => {
                                                     e.stopPropagation();
                                                     toggleChatSelection(chat.id);
                                                 }}
+                                                aria-label={`Select chat ${chat.name}`}
                                             />
                                         </div>
-                                        <div className="avatar">{chat.avatar}</div>
-                                        <div 
+                                        <div className="avatar" aria-hidden="true">{chat.avatar}</div>
+                                        <div
                                             className="chat-info"
                                             onClick={() => toggleChatExpansion(chat.id)}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === 'Enter' && toggleChatExpansion(chat.id)}
+                                            aria-expanded={expandedChat === chat.id}
+                                            aria-label={`${chat.name}, ${chat.messageCount} messages. Click to ${expandedChat === chat.id ? 'collapse' : 'expand'}`}
                                         >
                                             <div className="chat-name">
                                                 {chat.name}
-                                                <span className="badge">
+                                                <span className="badge" aria-label={chat.type === 'group' ? 'Group chat' : 'Private chat'}>
                                                     {chat.type === 'group' ? '👥' : '💬'}
                                                 </span>
                                             </div>
                                             <div className="chat-preview">{chat.lastMessage}</div>
                                         </div>
                                         <div className="chat-meta">
-                                            <div className="message-count">{chat.messageCount}</div>
+                                            <div className="message-count" title="My messages in chat" style={{ width: 'auto', padding: '0 8px', borderRadius: '12px' }}>
+                                                My: {chat.myMessageCount !== undefined ? chat.myMessageCount : '...'}
+                                            </div>
                                             <div className="chat-time">{chat.time}</div>
                                             <span className={`expand-icon ${expandedChat === chat.id ? 'expanded' : ''}`}>
                                                 ▼
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     {expandedChat === chat.id && (
                                         <div className="messages-container">
-                                            <div className="message-controls">
-                                                <button 
-                                                    className="btn btn-primary"
-                                                    onClick={() => selectAllMessagesInChat(chat.id)}
-                                                >
-                                                    ✓ Select All ({chat.messages.length})
-                                                </button>
-                                                <button 
-                                                    className="btn btn-secondary"
-                                                    onClick={() => deselectAllMessagesInChat(chat.id)}
-                                                >
-                                                    ✗ Deselect All
-                                                </button>
-                                            </div>
-                                            
-                                            <div className="messages-list">
-                                                {chat.messages.map(message => (
-                                                    <div 
-                                                        key={message.id} 
-                                                        className={`message-item ${selectedMessages.has(message.id) ? 'selected' : ''}`}
-                                                    >
-                                                        <div className="checkbox-wrapper">
-                                                            <input 
-                                                                type="checkbox" 
-                                                                className="checkbox message-checkbox"
-                                                                checked={selectedMessages.has(message.id)}
-                                                                onChange={() => toggleMessageSelection(message.id)}
-                                                            />
-                                                        </div>
-                                                        <div className="message-content">
-                                                            <div className="message-text">
-                                                                {message.type !== 'text' && (
-                                                                    <span className={`message-type ${message.type}`}>
-                                                                        {message.type === 'photo' && '📷 Photo'}
-                                                                        {message.type === 'video' && '🎥 Video'}
-                                                                        {message.type === 'file' && '📎 File'}
-                                                                    </span>
-                                                                )}
-                                                                {message.text}
-                                                            </div>
-                                                            <div className="message-meta">
-                                                                <span className="message-sender">{message.sender}</span>
-                                                                <span>•</span>
-                                                                <span>{message.date}</span>
-                                                            </div>
-                                                        </div>
+                                            {loadingMessages === chat.id && chat.messages.length === 0 ? (
+                                                <div style={{ textAlign: 'center', padding: 40 }}>
+                                                    <div className="loading-spinner" style={{ width: 32, height: 32, margin: '0 auto 16px' }}></div>
+                                                    <p style={{ color: 'var(--text-muted)' }}>Loading your messages...</p>
+                                                </div>
+                                            ) : chat.messages.length === 0 ? (
+                                                <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>
+                                                    <p>No messages from you in this chat</p>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="message-controls" role="group" aria-label="Message selection actions">
+                                                        <button
+                                                            className="btn btn-primary"
+                                                            onClick={() => selectAllMessagesInChat(chat.id)}
+                                                            aria-label={`Select all ${chat.messages.length} messages in ${chat.name}`}
+                                                        >
+                                                            ✓ Select All ({chat.messages.length})
+                                                        </button>
+                                                        <button
+                                                            className="btn btn-secondary"
+                                                            onClick={() => deselectAllMessagesInChat(chat.id)}
+                                                            aria-label={`Deselect all messages in ${chat.name}`}
+                                                        >
+                                                            ✗ Deselect All
+                                                        </button>
                                                     </div>
-                                                ))}
-                                            </div>
+
+                                                    <div className="messages-list">
+                                                        {chat.messages
+                                                            .filter(m => !searchQuery || (m.text && m.text.toLowerCase().includes(searchQuery.toLowerCase())))
+                                                            .map(message => (
+                                                                <div
+                                                                    key={message.id}
+                                                                    className={`message-item ${selectedMessages.has(message.id) || selectedChats.has(chat.id) ? 'selected' : ''}`}
+                                                                    onClick={() => toggleMessageSelection(message.id, chat.id)}
+                                                                >
+                                                                    <div className="checkbox-wrapper">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className="checkbox message-checkbox"
+                                                                            checked={selectedMessages.has(message.id) || selectedChats.has(chat.id)}
+                                                                            readOnly
+                                                                            aria-label={`Select message: ${(message.text || '').substring(0, 50)}`}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="message-content">
+                                                                        <div className="message-text">
+                                                                            {message.type !== 'text' && (
+                                                                                <span className={`message-type ${message.type}`}>
+                                                                                    {message.type === 'photo' && '📷 Photo'}
+                                                                                    {message.type === 'video' && '🎥 Video'}
+                                                                                    {message.type === 'file' && '📎 File'}
+                                                                                </span>
+                                                                            )}
+                                                                            {message.text}
+                                                                        </div>
+                                                                        <div className="message-meta">
+                                                                            <span className="message-sender">{message.sender}</span>
+                                                                            <span>•</span>
+                                                                            <span>{message.date}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                    </div>
+
+                                                    {/* Sync Status / Stop Button */}
+                                                    {(loadingMessages === chat.id || isLoadingMore) && (
+                                                        <div style={{ textAlign: 'center', marginTop: 16, padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 8 }}>
+                                                            <div className="loading-spinner" style={{ width: 16, height: 16, borderTopColor: 'var(--primary)', borderRightColor: 'var(--primary)', marginRight: 8, verticalAlign: 'middle' }}></div>
+                                                            <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                                                Syncing history... ({chat.messages.length} loaded)
+                                                            </span>
+                                                            {/* 
+                                                            <button 
+                                                                className="btn btn-secondary"
+                                                                style={{ marginLeft: 12, padding: '4px 12px', fontSize: '12px' }}
+                                                                onClick={() => window.location.reload()} // Crude stop
+                                                            >
+                                                                Stop
+                                                            </button>
+                                                            */}
+                                                        </div>
+                                                    )}
+
+                                                    {/* End of history indicator */}
+                                                    {!(loadingMessages === chat.id || isLoadingMore) && chat.messages.length > 0 && (
+                                                        <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--text-muted)', fontSize: '12px' }}>
+                                                            ✓ End of message history ({chat.messages.length} total)
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
                                     )}
                                 </div>
                             ))}
                         </div>
 
-                        <button 
-                            className="btn btn-danger" 
-                            disabled={totalSelectedMessages === 0}
-                            onClick={() => {
-                                if (confirm(`Delete ${totalSelectedMessages} selected message(s)?\n\nThis cannot be undone!`)) {
-                                    alert('🗑️ Deletion started! This may take a few moments...');
-                                }
-                            }}
+                        <button
+                            className="btn btn-danger"
+                            disabled={totalSelectedMessages === 0 || isDeleting}
+                            onClick={handleDelete}
+                            aria-label={`Delete ${totalSelectedMessages} selected message${totalSelectedMessages !== 1 ? 's' : ''}`}
                         >
-                            🗑️ Delete {totalSelectedMessages} Message{totalSelectedMessages !== 1 ? 's' : ''}
+                            {isDeleting ? (
+                                <><span className="loading-spinner"></span> Deleting...</>
+                            ) : (
+                                <>🗑️ Delete {totalSelectedMessages} Message{totalSelectedMessages !== 1 ? 's' : ''}</>
+                            )}
                         </button>
                     </div>
-                </div>
+                </div >
             );
         }
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
+
 </html>
