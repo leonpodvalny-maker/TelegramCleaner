@@ -8,8 +8,8 @@ import android.util.Log;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 
-import org.drinkless.td.libcore.telegram.Client;
-import org.drinkless.td.libcore.telegram.TdApi;
+import org.drinkless.tdlib.Client;
+import org.drinkless.tdlib.TdApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +71,11 @@ public class TdLibHandler {
         this.deletionRateLimiter = new DeletionRateLimiter();
         this.retrievalRateLimiter = new RetrievalRateLimiter();
 
-        Client.execute(new TdApi.SetLogVerbosityLevel(2));
+        try {
+            Client.execute(new TdApi.SetLogVerbosityLevel(2));
+        } catch (Throwable e) {
+            Log.e(TAG, "Failed to set log verbosity level", e);
+        }
     }
 
     public void initialize(int apiId, String apiHash, TdLibResultHandler handler) {
@@ -128,8 +132,8 @@ public class TdLibHandler {
         parameters.apiHash = apiHash;
         parameters.systemLanguageCode = "en";
         parameters.deviceModel = "Android";
+        parameters.systemVersion = android.os.Build.VERSION.RELEASE;
         parameters.applicationVersion = "1.0";
-        parameters.enableStorageOptimizer = true;
 
         sendRequest(parameters, result -> {
             if (result instanceof TdApi.Ok) {
