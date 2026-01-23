@@ -295,7 +295,104 @@
     <script type="text/babel">
         const { useState } = React;
 
+        // Translations
+        const translations = {
+            en: {
+                title: 'Telegram Cleaner',
+                subtitle: 'Clean up your Telegram messages easily',
+                subtitleMain: 'Manage and clean your Telegram messages',
+                chooseLanguage: 'Choose Language',
+                phoneNumber: 'Phone Number',
+                phoneNumberPlaceholder: '+1234567890',
+                phoneNumberHelp: 'Enter your phone number with country code',
+                cloudPassword: 'Cloud Password',
+                cloudPasswordPlaceholder: 'Your 2FA password (if enabled)',
+                cloudPasswordHelp: 'Only required if you have Two-Step Verification enabled',
+                apiId: 'API ID',
+                apiIdPlaceholder: 'Your API ID',
+                apiHash: 'API Hash',
+                apiHashPlaceholder: 'Your API Hash',
+                apiHashHelp: 'Get your API credentials from',
+                howToGetApi: 'How to get API credentials:',
+                howToStep1: 'Visit',
+                howToStep2: 'Log in with your phone number',
+                howToStep3: 'Fill in the application details (any name will work)',
+                howToStep4: 'Copy your',
+                howToStep5: 'Paste them in the fields above',
+                and: 'and',
+                loginButton: 'Login to Telegram',
+                requiredFields: 'Please fill in all required fields',
+                demoMode: 'Demo Mode:',
+                demoModeText: 'This is a demonstration with mock data. In a real implementation, this would connect to the Telegram API to manage your actual messages.',
+                backToChats: '← Back to Chats',
+                searchChats: 'Search chats...',
+                searchMessages: 'Search messages...',
+                chatsSelected: 'chat(s) selected',
+                messagesSelected: 'message(s) selected',
+                noChatsFound: 'No chats found',
+                noMessagesFound: 'No messages found',
+                messages: 'messages',
+                selectAllMessages: 'Select All Messages',
+                deleteSelected: '🗑️ Delete Selected',
+                selectAtLeastOneChat: 'Please select at least one chat',
+                deleteChatsConfirm: 'Are you sure you want to delete all messages from',
+                cannotUndo: 'chat(s)? This action cannot be undone.',
+                successfullyDeleted: 'Successfully deleted messages from',
+                selectAtLeastOneMessage: 'Please select at least one message',
+                deleteMessagesConfirm: 'Are you sure you want to delete',
+                messagesCantUndo: 'message(s)? This action cannot be undone.',
+                successfullyDeletedMessages: 'Successfully deleted',
+            },
+            ru: {
+                title: 'Telegram Очиститель',
+                subtitle: 'Легко очищайте ваши сообщения в Telegram',
+                subtitleMain: 'Управляйте и очищайте ваши сообщения в Telegram',
+                chooseLanguage: 'Выбрать язык',
+                phoneNumber: 'Номер телефона',
+                phoneNumberPlaceholder: '+79001234567',
+                phoneNumberHelp: 'Введите ваш номер телефона с кодом страны',
+                cloudPassword: 'Облачный пароль',
+                cloudPasswordPlaceholder: 'Ваш пароль 2FA (если включен)',
+                cloudPasswordHelp: 'Требуется только если у вас включена двухэтапная аутентификация',
+                apiId: 'API ID',
+                apiIdPlaceholder: 'Ваш API ID',
+                apiHash: 'API Hash',
+                apiHashPlaceholder: 'Ваш API Hash',
+                apiHashHelp: 'Получите API учётные данные на',
+                howToGetApi: 'Как получить API учётные данные:',
+                howToStep1: 'Перейдите на',
+                howToStep2: 'Войдите с вашим номером телефона',
+                howToStep3: 'Заполните данные приложения (любое имя подойдёт)',
+                howToStep4: 'Скопируйте ваш',
+                howToStep5: 'Вставьте их в поля выше',
+                and: 'и',
+                loginButton: 'Войти в Telegram',
+                requiredFields: 'Пожалуйста, заполните все обязательные поля',
+                demoMode: 'Демо-режим:',
+                demoModeText: 'Это демонстрация с тестовыми данными. В реальной реализации это подключилось бы к API Telegram для управления вашими настоящими сообщениями.',
+                backToChats: '← Назад к чатам',
+                searchChats: 'Поиск чатов...',
+                searchMessages: 'Поиск сообщений...',
+                chatsSelected: 'чат(ов) выбрано',
+                messagesSelected: 'сообщений выбрано',
+                noChatsFound: 'Чаты не найдены',
+                noMessagesFound: 'Сообщения не найдены',
+                messages: 'сообщений',
+                selectAllMessages: 'Выбрать все сообщения',
+                deleteSelected: '🗑️ Удалить выбранное',
+                selectAtLeastOneChat: 'Пожалуйста, выберите хотя бы один чат',
+                deleteChatsConfirm: 'Вы уверены, что хотите удалить все сообщения из',
+                cannotUndo: 'чат(ов)? Это действие нельзя отменить.',
+                successfullyDeleted: 'Успешно удалены сообщения из',
+                selectAtLeastOneMessage: 'Пожалуйста, выберите хотя бы одно сообщение',
+                deleteMessagesConfirm: 'Вы уверены, что хотите удалить',
+                messagesCantUndo: 'сообщений? Это действие нельзя отменить.',
+                successfullyDeletedMessages: 'Успешно удалено',
+            }
+        };
+
         function App() {
+            const [language, setLanguage] = useState('en');
             const [isLoggedIn, setIsLoggedIn] = useState(false);
             const [phoneNumber, setPhoneNumber] = useState('');
             const [cloudPassword, setCloudPassword] = useState('');
@@ -308,12 +405,14 @@
             const [viewMode, setViewMode] = useState('chats'); // 'chats' or 'messages'
             const [currentChat, setCurrentChat] = useState(null);
 
+            const t = translations[language];
+
             // Mock login function
             const handleLogin = (e) => {
                 e.preventDefault();
-                
+
                 if (!phoneNumber || !apiId || !apiHash) {
-                    alert('Please fill in all required fields');
+                    alert(t.requiredFields);
                     return;
                 }
 
@@ -443,32 +542,32 @@
             const handleDelete = () => {
                 if (viewMode === 'chats') {
                     if (selectedChats.size === 0) {
-                        alert('Please select at least one chat');
+                        alert(t.selectAtLeastOneChat);
                         return;
                     }
-                    
+
                     const confirmed = window.confirm(
-                        `Are you sure you want to delete all messages from ${selectedChats.size} chat(s)? This action cannot be undone.`
+                        `${t.deleteChatsConfirm} ${selectedChats.size} ${t.cannotUndo}`
                     );
-                    
+
                     if (confirmed) {
                         // In a real app, this would call the Telegram API
-                        alert(`Successfully deleted messages from ${selectedChats.size} chat(s)`);
+                        alert(`${t.successfullyDeleted} ${selectedChats.size} ${t.chatsSelected}`);
                         setSelectedChats(new Set());
                     }
                 } else {
                     if (selectedMessages.size === 0) {
-                        alert('Please select at least one message');
+                        alert(t.selectAtLeastOneMessage);
                         return;
                     }
-                    
+
                     const confirmed = window.confirm(
-                        `Are you sure you want to delete ${selectedMessages.size} message(s)? This action cannot be undone.`
+                        `${t.deleteMessagesConfirm} ${selectedMessages.size} ${t.messagesCantUndo}`
                     );
-                    
+
                     if (confirmed) {
                         // In a real app, this would call the Telegram API
-                        alert(`Successfully deleted ${selectedMessages.size} message(s)`);
+                        alert(`${t.successfullyDeletedMessages} ${selectedMessages.size} ${t.messagesSelected}`);
                         setSelectedMessages(new Set());
                     }
                 }
@@ -478,39 +577,53 @@
                 return (
                     <div className="container">
                         <div className="header">
-                            <h1>🧹 Telegram Cleaner</h1>
-                            <p>Clean up your Telegram messages easily</p>
+                            <h1>🧹 {t.title}</h1>
+                            <p>{t.subtitle}</p>
                         </div>
                         <div className="content">
+                            <div style={{textAlign: 'center', marginBottom: '20px'}}>
+                                <button
+                                    className="btn"
+                                    style={{
+                                        width: 'auto',
+                                        padding: '10px 20px',
+                                        fontSize: '14px',
+                                        background: language === 'en' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                                    }}
+                                    onClick={() => setLanguage(language === 'en' ? 'ru' : 'en')}
+                                >
+                                    {language === 'en' ? '🇷🇺 Русский' : '🇺🇸 English'}
+                                </button>
+                            </div>
                             <form className="login-form" onSubmit={handleLogin}>
                                 <div className="form-group">
-                                    <label>Phone Number *</label>
-                                    <input 
-                                        type="tel" 
-                                        placeholder="+1234567890"
+                                    <label>{t.phoneNumber} *</label>
+                                    <input
+                                        type="tel"
+                                        placeholder={t.phoneNumberPlaceholder}
                                         value={phoneNumber}
                                         onChange={(e) => setPhoneNumber(e.target.value)}
                                         required
                                     />
-                                    <p className="help-text">Enter your phone number with country code</p>
+                                    <p className="help-text">{t.phoneNumberHelp}</p>
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Cloud Password</label>
-                                    <input 
-                                        type="password" 
-                                        placeholder="Your 2FA password (if enabled)"
+                                    <label>{t.cloudPassword}</label>
+                                    <input
+                                        type="password"
+                                        placeholder={t.cloudPasswordPlaceholder}
                                         value={cloudPassword}
                                         onChange={(e) => setCloudPassword(e.target.value)}
                                     />
-                                    <p className="help-text">Only required if you have Two-Step Verification enabled</p>
+                                    <p className="help-text">{t.cloudPasswordHelp}</p>
                                 </div>
 
                                 <div className="form-group">
-                                    <label>API ID *</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="Your API ID"
+                                    <label>{t.apiId} *</label>
+                                    <input
+                                        type="text"
+                                        placeholder={t.apiIdPlaceholder}
                                         value={apiId}
                                         onChange={(e) => setApiId(e.target.value)}
                                         required
@@ -518,35 +631,35 @@
                                 </div>
 
                                 <div className="form-group">
-                                    <label>API Hash *</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="Your API Hash"
+                                    <label>{t.apiHash} *</label>
+                                    <input
+                                        type="text"
+                                        placeholder={t.apiHashPlaceholder}
                                         value={apiHash}
                                         onChange={(e) => setApiHash(e.target.value)}
                                         required
                                     />
                                     <p className="help-text">
-                                        Get your API credentials from{' '}
+                                        {t.apiHashHelp}{' '}
                                         <a href="https://my.telegram.org/apps" target="_blank" rel="noopener noreferrer">
                                             my.telegram.org/apps
                                         </a>
                                     </p>
-                                    
+
                                     <div className="instruction-box">
-                                        <strong>How to get API credentials:</strong>
+                                        <strong>{t.howToGetApi}</strong>
                                         <ol>
-                                            <li>Visit <a href="https://my.telegram.org/apps" target="_blank">my.telegram.org/apps</a></li>
-                                            <li>Log in with your phone number</li>
-                                            <li>Fill in the application details (any name will work)</li>
-                                            <li>Copy your <strong>api_id</strong> and <strong>api_hash</strong></li>
-                                            <li>Paste them in the fields above</li>
+                                            <li>{t.howToStep1} <a href="https://my.telegram.org/apps" target="_blank">my.telegram.org/apps</a></li>
+                                            <li>{t.howToStep2}</li>
+                                            <li>{t.howToStep3}</li>
+                                            <li>{t.howToStep4} <strong>api_id</strong> {t.and} <strong>api_hash</strong></li>
+                                            <li>{t.howToStep5}</li>
                                         </ol>
                                     </div>
                                 </div>
 
                                 <button type="submit" className="btn">
-                                    Login to Telegram
+                                    {t.loginButton}
                                 </button>
                             </form>
                         </div>
@@ -557,25 +670,43 @@
             return (
                 <div className="container">
                     <div className="header">
-                        <h1>🧹 Telegram Cleaner</h1>
-                        <p>Manage and clean your Telegram messages</p>
+                        <h1>🧹 {t.title}</h1>
+                        <p>{t.subtitleMain}</p>
+                        <div style={{marginTop: '10px'}}>
+                            <button
+                                style={{
+                                    padding: '8px 16px',
+                                    fontSize: '12px',
+                                    background: 'rgba(255, 255, 255, 0.2)',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s'
+                                }}
+                                onClick={() => setLanguage(language === 'en' ? 'ru' : 'en')}
+                                onMouseOver={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.3)'}
+                                onMouseOut={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
+                            >
+                                {language === 'en' ? '🇷🇺 Русский' : '🇺🇸 English'}
+                            </button>
+                        </div>
                     </div>
                     <div className="content">
                         <div className="alert alert-info">
-                            <strong>Demo Mode:</strong> This is a demonstration with mock data. In a real implementation, 
-                            this would connect to the Telegram API to manage your actual messages.
+                            <strong>{t.demoMode}</strong> {t.demoModeText}
                         </div>
 
                         {viewMode === 'messages' && (
                             <button className="btn back-btn" onClick={() => setViewMode('chats')}>
-                                ← Back to Chats
+                                {t.backToChats}
                             </button>
                         )}
 
                         <div className="search-box">
-                            <input 
-                                type="text" 
-                                placeholder={viewMode === 'chats' ? "Search chats..." : "Search messages..."}
+                            <input
+                                type="text"
+                                placeholder={viewMode === 'chats' ? t.searchChats : t.searchMessages}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -585,20 +716,20 @@
                             <>
                                 {selectedChats.size > 0 && (
                                     <div className="selection-info">
-                                        {selectedChats.size} chat(s) selected
+                                        {selectedChats.size} {t.chatsSelected}
                                     </div>
                                 )}
 
                                 <div className="chat-list">
                                     {filteredChats.length === 0 ? (
                                         <div className="empty-state">
-                                            <p>No chats found</p>
+                                            <p>{t.noChatsFound}</p>
                                         </div>
                                     ) : (
                                         filteredChats.map(chat => (
                                             <div key={chat.id} className="chat-item">
-                                                <input 
-                                                    type="checkbox" 
+                                                <input
+                                                    type="checkbox"
                                                     className="chat-checkbox"
                                                     checked={selectedChats.has(chat.id)}
                                                     onChange={() => toggleChatSelection(chat.id)}
@@ -611,7 +742,7 @@
                                                     <div className="chat-preview">{chat.lastMessage}</div>
                                                 </div>
                                                 <div className="chat-meta">
-                                                    {chat.messageCount} messages
+                                                    {chat.messageCount} {t.messages}
                                                 </div>
                                             </div>
                                         ))
@@ -626,31 +757,31 @@
                                             <h3 style={{color: '#333', marginBottom: '10px'}}>
                                                 {currentChat.name}
                                             </h3>
-                                            <button 
-                                                className="btn" 
+                                            <button
+                                                className="btn"
                                                 style={{width: 'auto', padding: '8px 16px', fontSize: '14px'}}
                                                 onClick={selectAllMessages}
                                             >
-                                                Select All Messages
+                                                {t.selectAllMessages}
                                             </button>
                                         </div>
 
                                         {selectedMessages.size > 0 && (
                                             <div className="selection-info">
-                                                {selectedMessages.size} message(s) selected
+                                                {selectedMessages.size} {t.messagesSelected}
                                             </div>
                                         )}
 
                                         <div className="chat-list">
                                             {filteredMessages.length === 0 ? (
                                                 <div className="empty-state">
-                                                    <p>No messages found</p>
+                                                    <p>{t.noMessagesFound}</p>
                                                 </div>
                                             ) : (
                                                 filteredMessages.map(message => (
                                                     <div key={message.id} className="message-item">
-                                                        <input 
-                                                            type="checkbox" 
+                                                        <input
+                                                            type="checkbox"
                                                             className="message-checkbox"
                                                             checked={selectedMessages.has(message.id)}
                                                             onChange={() => toggleMessageSelection(message.id)}
@@ -669,7 +800,7 @@
                         )}
 
                         <button className="btn btn-danger" onClick={handleDelete}>
-                            🗑️ Delete Selected
+                            {t.deleteSelected}
                         </button>
                     </div>
                 </div>

@@ -2,8 +2,10 @@
   "name": "telegram-cleaner",
   "version": "1.0.0",
   "description": "Beautiful Telegram message cleaner with modern UI",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "build": "mkdir -p www && cp -r *.html www/ && cp README.md www/ 2>/dev/null || true",
     "cap:init": "npx cap init \"Telegram Cleaner\" com.telegramcleaner.app --web-dir www",
     "cap:add:android": "npx cap add android",
@@ -22,7 +24,10 @@
   "license": "MIT",
   "dependencies": {
     "@capacitor/android": "^6.0.0",
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.22.1",
+    "telegram": "^2.26.22"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",

@@ -539,9 +539,15 @@
             const deselectAllMessagesInChat = (chatId) => {
                 const chat = chats.find(c => c.id === chatId);
                 if (chat) {
-                    const newSelected = new Set(selectedMessages);
-                    chat.messages.forEach(msg => newSelected.delete(msg.id));
-                    setSelectedMessages(newSelected);
+                    const newSelectedMessages = new Set(selectedMessages);
+                    const newSelectedChats = new Set(selectedChats);
+
+                    // Keep behavior consistent: deselecting messages for a chat should also unselect the chat
+                    newSelectedChats.delete(chatId);
+
+                    chat.messages.forEach(msg => newSelectedMessages.delete(msg.id));
+                    setSelectedMessages(newSelectedMessages);
+                    setSelectedChats(newSelectedChats);
                 }
             };
 

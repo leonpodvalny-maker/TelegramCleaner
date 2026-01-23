@@ -9,7 +9,12 @@ const config: CapacitorConfig = {
   },
   android: {
     allowMixedContent: true,
-    backgroundColor: '#1a1d29'
+    backgroundColor: '#343b54'
+  },
+  plugins: {
+    TelegramCleanerPlugin: {
+      enabled: true
+    }
   }
 };
 

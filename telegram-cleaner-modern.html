@@ -1362,8 +1362,9 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
 
         // ==================== TELEGRAM API SERVICE ====================
-        // Connects to Node.js backend with real GramJS
-        const API_BASE = window.location.origin;
+        // Uses Capacitor plugin with TDLib for native Telegram integration
+        const { Plugins } = window.Capacitor || { Plugins: {} };
+        const TelegramCleanerPlugin = Plugins.TelegramCleanerPlugin;
 
         class TelegramService {
             constructor() {
@@ -1373,76 +1374,76 @@ Telegram выдаст вам кучу непонятных строчек, бу�
             }
 
             async initialize(apiId, apiHash) {
-                const response = await fetch(`${API_BASE}/api/init`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        apiId,
-                        apiHash,
-                        sessionString: this.sessionString
-                    })
-                });
-                const data = await response.json();
+                try {
+                    const result = await TelegramCleanerPlugin.initialize({
+                        apiId: apiId,
+                        apiHash: apiHash,
+                        sessionString: this.sessionString || ''
+                    });
 
-                if (!data.success) throw new Error(data.error);
+                    if (!result.success) throw new Error(result.error);
 
-                this.sessionId = data.sessionId;
-                localStorage.setItem('tg_sessionId', data.sessionId);
-                localStorage.setItem('tg_api_id', apiId);
-                localStorage.setItem('tg_api_hash', apiHash);
+                    this.sessionId = 'native';
+                    localStorage.setItem('tg_sessionId', 'native');
+                    localStorage.setItem('tg_api_id', apiId);
+                    localStorage.setItem('tg_api_hash', apiHash);
 
-                if (data.isAuthorized) {
-                    this.user = data.user;
+                    if (result.isAuthorized) {
+                        this.user = result.user;
+                    }
+
+                    return { isAuthorized: result.isAuthorized, user: result.user };
+                } catch (error) {
+                    console.error('Initialize error:', error);
+                    throw new Error(error.message || 'Failed to initialize');
                 }
-
-                return { isAuthorized: data.isAuthorized, user: data.user };
             }
 
             async sendCode(phone) {
-                const response = await fetch(`${API_BASE}/api/send-code`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionId: this.sessionId, phone })
-                });
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
-                return data;
+                try {
+                    const result = await TelegramCleanerPlugin.sendCode({ phone });
+                    if (!result.success) throw new Error(result.error);
+                    return result;
+                } catch (error) {
+                    console.error('Send code error:', error);
+                    throw new Error(error.message || 'Failed to send code');
+                }
             }
 
             async signIn(phone, code) {
-                const response = await fetch(`${API_BASE}/api/sign-in`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionId: this.sessionId, code })
-                });
-                const data = await response.json();
+                try {
+                    const result = await TelegramCleanerPlugin.signIn({ code });
 
-                if (data.needs2FA) {
-                    return { success: false, needs2FA: true };
+                    if (result.needs2FA) {
+                        return { success: false, needs2FA: true };
+                    }
+                    if (!result.success) throw new Error(result.error);
+
+                    this.sessionString = result.sessionString || '';
+                    this.user = result.user;
+                    localStorage.setItem('tg_sessionString', this.sessionString);
+
+                    return { success: true, user: result.user };
+                } catch (error) {
+                    console.error('Sign in error:', error);
+                    throw new Error(error.message || 'Failed to sign in');
                 }
-                if (!data.success) throw new Error(data.error);
-
-                this.sessionString = data.sessionString;
-                this.user = data.user;
-                localStorage.setItem('tg_sessionString', data.sessionString);
-
-                return { success: true, user: data.user };
             }
 
             async signIn2FA(password) {
-                const response = await fetch(`${API_BASE}/api/sign-in-2fa`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionId: this.sessionId, password })
-                });
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
+                try {
+                    const result = await TelegramCleanerPlugin.signIn2FA({ password });
+                    if (!result.success) throw new Error(result.error);
 
-                this.sessionString = data.sessionString;
-                this.user = data.user;
-                localStorage.setItem('tg_sessionString', data.sessionString);
+                    this.sessionString = result.sessionString || '';
+                    this.user = result.user;
+                    localStorage.setItem('tg_sessionString', this.sessionString);
 
-                return { success: true, user: data.user };
+                    return { success: true, user: result.user };
+                } catch (error) {
+                    console.error('2FA error:', error);
+                    throw new Error(error.message || 'Failed to sign in with 2FA');
+                }
             }
 
             isAuthorized() {
@@ -1454,62 +1455,67 @@ Telegram выдаст вам кучу непонятных строчек, бу�
             }
 
             async getDialogs() {
-                const response = await fetch(`${API_BASE}/api/dialogs?sessionId=${this.sessionId}`);
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
-                return data.dialogs.map(d => ({ ...d, messages: [] }));
+                try {
+                    const result = await TelegramCleanerPlugin.getDialogs();
+                    if (!result.success) throw new Error(result.error);
+                    return result.dialogs.map(d => ({ ...d, messages: [] }));
+                } catch (error) {
+                    console.error('Get dialogs error:', error);
+                    throw new Error(error.message || 'Failed to load chats');
+                }
             }
 
             async getMessages(chatId, offsetId = 0, limit = 8000) {
-                const response = await fetch(`${API_BASE}/api/messages?sessionId=${this.sessionId}&chatId=${chatId}&limit=${limit}&offsetId=${offsetId}`);
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
-                return data.messages;
+                try {
+                    const result = await TelegramCleanerPlugin.getMessages({
+                        chatId,
+                        offsetId,
+                        limit
+                    });
+                    if (!result.success) throw new Error(result.error);
+                    return result.messages;
+                } catch (error) {
+                    console.error('Get messages error:', error);
+                    throw new Error(error.message || 'Failed to load messages');
+                }
             }
 
             async deleteMessages(chatId, messageIds, revoke = true) {
-                const response = await fetch(`${API_BASE}/api/delete-messages`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        sessionId: this.sessionId,
+                try {
+                    const result = await TelegramCleanerPlugin.deleteMessages({
                         chatId,
                         messageIds,
                         revoke
-                    })
-                });
-                const data = await response.json();
-                return data; // Returns { success: true, deleted: N } or { success: false, floodWait: S }
+                    });
+                    return result;
+                } catch (error) {
+                    console.error('Delete messages error:', error);
+                    throw new Error(error.message || 'Failed to delete messages');
+                }
             }
 
             async batchScan(chatIds) {
-                const response = await fetch(`${API_BASE}/api/batch-scan`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        sessionId: this.sessionId,
-                        chatIds
-                    })
-                });
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
-                return data.counts; // Returns { chatId: count }
+                try {
+                    const result = await TelegramCleanerPlugin.batchScan({ chatIds });
+                    if (!result.success) throw new Error(result.error);
+                    return result.counts;
+                } catch (error) {
+                    console.error('Batch scan error:', error);
+                    throw new Error(error.message || 'Failed to scan chats');
+                }
             }
 
             async logout() {
-                if (this.sessionId) {
-                    await fetch(`${API_BASE}/api/logout`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ sessionId: this.sessionId })
-                    });
+                try {
+                    await TelegramCleanerPlugin.logout();
+                } catch (error) {
+                    console.error('Logout error:', error);
                 }
                 this.sessionId = null;
                 this.sessionString = '';
                 this.user = null;
                 localStorage.removeItem('tg_sessionId');
                 localStorage.removeItem('tg_sessionString');
-                // Keep tg_api_id and tg_api_hash so user can log back in easily
             }
         }
 
