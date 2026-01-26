@@ -49,12 +49,16 @@ public class TdLibHandler {
     private DeletionRateLimiter deletionRateLimiter;
     private RetrievalRateLimiter retrievalRateLimiter;
 
+    private static boolean nativeLibraryLoaded = false;
+
     static {
         try {
             System.loadLibrary("tdjni");
-            Log.d(TAG, "TDLib native library loaded successfully");
+            nativeLibraryLoaded = true;
+            Log.i(TAG, "TDLib native library loaded successfully");
         } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "Failed to load TDLib native library", e);
+            nativeLibraryLoaded = false;
+            Log.e(TAG, "Failed to load TDLib native library - TDLib features will be disabled", e);
         }
     }
 
@@ -71,15 +75,27 @@ public class TdLibHandler {
         this.deletionRateLimiter = new DeletionRateLimiter();
         this.retrievalRateLimiter = new RetrievalRateLimiter();
 
-        try {
-            Client.execute(new TdApi.SetLogVerbosityLevel(2));
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to set log verbosity level", e);
+        if (nativeLibraryLoaded) {
+            try {
+                Client.execute(new TdApi.SetLogVerbosityLevel(2));
+            } catch (Throwable e) {
+                Log.e(TAG, "Failed to set log verbosity level", e);
+            }
+        } else {
+            Log.w(TAG, "TDLib not available - native library not loaded");
         }
     }
 
     public void initialize(int apiId, String apiHash, TdLibResultHandler handler) {
         Log.d(TAG, "Initializing TDLib with API ID: " + apiId);
+
+        if (!nativeLibraryLoaded) {
+            String errorMsg = "TDLib native library not available. The app needs the real TDLib libraries to function. " +
+                    "Please use the web version at http://localhost:3000 instead.";
+            Log.e(TAG, errorMsg);
+            handler.onError(errorMsg, "LIBRARY_NOT_LOADED");
+            return;
+        }
 
         this.apiId = apiId;
         this.apiHash = apiHash;

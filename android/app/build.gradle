@@ -45,7 +45,7 @@ dependencies {
     implementation project(':capacitor-cordova-android-plugins')
 
     // TDLib for Telegram API integration
-    // Using local TDLib from TGX-Android (prebuilt native libs + Java wrapper)
+    // Using local TDLib classes (native libs disabled until properly built)
 }
 
 apply from: 'capacitor.build.gradle'

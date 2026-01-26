@@ -5,24 +5,13 @@
   "main": "electron-main.js",
   "scripts": {
     "start": "electron .",
-    "server": "node backend-server.js",
-    "dev": "concurrently \"npm run server\" \"npm run start\"",
     "build": "electron-builder --win portable",
     "build-installer": "electron-builder --win"
   },
-  "keywords": [
-    "telegram",
-    "cleaner",
-    "messages"
-  ],
+  "keywords": ["telegram", "cleaner", "messages"],
   "author": "Telegram Cleaner",
   "license": "MIT",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^4.22.1"
-  },
   "devDependencies": {
-    "concurrently": "^8.2.2",
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1"
   },
@@ -33,22 +22,16 @@
       "target": [
         {
           "target": "portable",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         }
-      ],
-      "sign": null,
-      "signingHashAlgorithms": []
+      ]
     },
     "portable": {
       "artifactName": "TelegramCleaner-Portable.exe"
     },
     "files": [
       "electron-main.js",
-      "telegram-cleaner-modern.html",
-      "telegram-cleaner-demo.html",
-      "backend-server.js"
+      "telegram-cleaner-modern.html"
     ],
     "directories": {
       "output": "dist"

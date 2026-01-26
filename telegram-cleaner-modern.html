@@ -15,22 +15,22 @@
         rel="stylesheet">
     <style>
         :root {
-            --primary: #00aaff;
-            --primary-light: #66ccff;
-            --primary-dark: #0088dd;
-            --secondary: #b87fff;
-            --success: #4ade80;
-            --danger: #ff8a8a;
-            --warning: #fcd34d;
-            --dark: #4a5568;
-            --dark-light: #5a6a7f;
-            --dark-lighter: #6b7b94;
-            --text-primary: #ffffff;
-            --text-secondary: #e2e8f0;
-            --text-muted: #cbd5e0;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --shadow: rgba(0, 0, 0, 0.15);
+            --primary: #0088cc;
+            --primary-light: #2AABEE;
+            --primary-dark: #006699;
+            --secondary: #40A7E3;
+            --success: #4DCD5E;
+            --danger: #E53935;
+            --warning: #F5A623;
+            --dark: #0E1621;
+            --dark-light: #17212B;
+            --dark-lighter: #212D3B;
+            --text-primary: #FFFFFF;
+            --text-secondary: #AAAAAA;
+            --text-muted: #8E8E93;
+            --glass-bg: rgba(23, 33, 43, 0.85);
+            --glass-border: rgba(42, 171, 238, 0.2);
+            --shadow: rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -41,7 +41,7 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #4a5568 0%, #5a6a7f 50%, #4a5568 100%);
+            background: linear-gradient(135deg, #0E1621 0%, #17212B 50%, #0E1621 100%);
             min-height: 100vh;
             color: var(--text-primary);
             padding: 20px;
@@ -57,9 +57,9 @@
             width: 200%;
             height: 200%;
             background:
-                radial-gradient(circle at 20% 30%, rgba(0, 170, 255, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(184, 127, 255, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.15) 0%, transparent 60%);
+                radial-gradient(circle at 20% 30%, rgba(0, 136, 204, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(42, 171, 238, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(77, 205, 94, 0.08) 0%, transparent 60%);
             animation: drift 30s infinite ease-in-out alternate;
             pointer-events: none;
             z-index: 0;
@@ -99,7 +99,7 @@
         .header h1 {
             font-size: 56px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -118,7 +118,7 @@
         .logo {
             width: 72px;
             height: 72px;
-            filter: drop-shadow(0 4px 20px rgba(0, 170, 255, 0.4));
+            filter: drop-shadow(0 4px 20px rgba(0, 136, 204, 0.4));
             animation: logoFloat 3s ease-in-out infinite;
         }
 
@@ -137,7 +137,7 @@
         .logo-text {
             font-size: 48px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1362,9 +1362,27 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
 
         // ==================== TELEGRAM API SERVICE ====================
-        // Uses Capacitor plugin with TDLib for native Telegram integration
-        const { Plugins } = window.Capacitor || { Plugins: {} };
-        const TelegramCleanerPlugin = Plugins.TelegramCleanerPlugin;
+        // Supports both browser (HTTP API) and Capacitor (native plugin)
+
+        // Debug: Log Capacitor info
+        console.log('Capacitor available:', !!window.Capacitor);
+        if (window.Capacitor) {
+            console.log('Capacitor.Plugins:', window.Capacitor.Plugins);
+            console.log('Available plugins:', Object.keys(window.Capacitor.Plugins || {}));
+        }
+
+        const TelegramCleanerPlugin = window.Capacitor?.Plugins?.TelegramCleanerPlugin;
+        const isNative = !!TelegramCleanerPlugin;
+        const API_BASE = isNative ? '' : 'http://localhost:3000/api';
+
+        console.log('TelegramCleanerPlugin found:', !!TelegramCleanerPlugin);
+        console.log('isNative:', isNative);
+
+        // Show alert for debugging on phone
+        if (window.Capacitor && !TelegramCleanerPlugin) {
+            const availablePlugins = Object.keys(window.Capacitor.Plugins || {}).join(', ') || 'none';
+            alert('Plugin Error!\n\nTelegramCleanerPlugin not found.\n\nAvailable: ' + availablePlugins);
+        }
 
         class TelegramService {
             constructor() {
@@ -1375,16 +1393,34 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async initialize(apiId, apiHash) {
                 try {
-                    const result = await TelegramCleanerPlugin.initialize({
-                        apiId: apiId,
-                        apiHash: apiHash,
-                        sessionString: this.sessionString || ''
-                    });
+                    // Check if we're in Capacitor but plugin is missing
+                    if (window.Capacitor && !TelegramCleanerPlugin) {
+                        throw new Error('Native plugin not loaded. Please reinstall the app.');
+                    }
+
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.initialize({
+                            apiId: apiId,
+                            apiHash: apiHash,
+                            sessionString: this.sessionString || ''
+                        });
+                    } else {
+                        const response = await fetch(`${API_BASE}/init`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ apiId, apiHash, sessionString: this.sessionString })
+                        });
+                        if (!response.ok) {
+                            throw new Error(`Server error: ${response.status}`);
+                        }
+                        result = await response.json();
+                    }
 
                     if (!result.success) throw new Error(result.error);
 
-                    this.sessionId = 'native';
-                    localStorage.setItem('tg_sessionId', 'native');
+                    this.sessionId = result.sessionId || 'native';
+                    localStorage.setItem('tg_sessionId', this.sessionId);
                     localStorage.setItem('tg_api_id', apiId);
                     localStorage.setItem('tg_api_hash', apiHash);
 
@@ -1401,7 +1437,17 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async sendCode(phone) {
                 try {
-                    const result = await TelegramCleanerPlugin.sendCode({ phone });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.sendCode({ phone });
+                    } else {
+                        const response = await fetch(`${API_BASE}/send-code`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId, phone })
+                        });
+                        result = await response.json();
+                    }
                     if (!result.success) throw new Error(result.error);
                     return result;
                 } catch (error) {
@@ -1412,7 +1458,17 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async signIn(phone, code) {
                 try {
-                    const result = await TelegramCleanerPlugin.signIn({ code });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.signIn({ code });
+                    } else {
+                        const response = await fetch(`${API_BASE}/sign-in`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId, code })
+                        });
+                        result = await response.json();
+                    }
 
                     if (result.needs2FA) {
                         return { success: false, needs2FA: true };
@@ -1432,7 +1488,17 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async signIn2FA(password) {
                 try {
-                    const result = await TelegramCleanerPlugin.signIn2FA({ password });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.signIn2FA({ password });
+                    } else {
+                        const response = await fetch(`${API_BASE}/sign-in-2fa`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId, password })
+                        });
+                        result = await response.json();
+                    }
                     if (!result.success) throw new Error(result.error);
 
                     this.sessionString = result.sessionString || '';
@@ -1456,7 +1522,13 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async getDialogs() {
                 try {
-                    const result = await TelegramCleanerPlugin.getDialogs();
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.getDialogs();
+                    } else {
+                        const response = await fetch(`${API_BASE}/dialogs?sessionId=${this.sessionId}`);
+                        result = await response.json();
+                    }
                     if (!result.success) throw new Error(result.error);
                     return result.dialogs.map(d => ({ ...d, messages: [] }));
                 } catch (error) {
@@ -1467,11 +1539,17 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async getMessages(chatId, offsetId = 0, limit = 8000) {
                 try {
-                    const result = await TelegramCleanerPlugin.getMessages({
-                        chatId,
-                        offsetId,
-                        limit
-                    });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.getMessages({
+                            chatId,
+                            offsetId,
+                            limit
+                        });
+                    } else {
+                        const response = await fetch(`${API_BASE}/messages?sessionId=${this.sessionId}&chatId=${chatId}&offsetId=${offsetId}&limit=${limit}`);
+                        result = await response.json();
+                    }
                     if (!result.success) throw new Error(result.error);
                     return result.messages;
                 } catch (error) {
@@ -1482,11 +1560,21 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async deleteMessages(chatId, messageIds, revoke = true) {
                 try {
-                    const result = await TelegramCleanerPlugin.deleteMessages({
-                        chatId,
-                        messageIds,
-                        revoke
-                    });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.deleteMessages({
+                            chatId,
+                            messageIds,
+                            revoke
+                        });
+                    } else {
+                        const response = await fetch(`${API_BASE}/delete-messages`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId, chatId, messageIds, revoke })
+                        });
+                        result = await response.json();
+                    }
                     return result;
                 } catch (error) {
                     console.error('Delete messages error:', error);
@@ -1496,7 +1584,17 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async batchScan(chatIds) {
                 try {
-                    const result = await TelegramCleanerPlugin.batchScan({ chatIds });
+                    let result;
+                    if (isNative) {
+                        result = await TelegramCleanerPlugin.batchScan({ chatIds });
+                    } else {
+                        const response = await fetch(`${API_BASE}/batch-scan`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId, chatIds })
+                        });
+                        result = await response.json();
+                    }
                     if (!result.success) throw new Error(result.error);
                     return result.counts;
                 } catch (error) {
@@ -1507,7 +1605,15 @@ Telegram выдаст вам кучу непонятных строчек, бу�
 
             async logout() {
                 try {
-                    await TelegramCleanerPlugin.logout();
+                    if (isNative) {
+                        await TelegramCleanerPlugin.logout();
+                    } else {
+                        await fetch(`${API_BASE}/logout`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sessionId: this.sessionId })
+                        });
+                    }
                 } catch (error) {
                     console.error('Logout error:', error);
                 }
@@ -1777,7 +1883,14 @@ Telegram выдаст вам кучу непонятных строчек, бу�
                     // BUT: User clicked Refresh, so they probably WANT to refresh the messages too.
                     // SO: We should wipe them (default behavior) but then immediately trigger a reload for that chat.
 
-                    const hydratedDialogs = dialogs.map(d => ({ ...d, messages: d.messages || [] }));
+                    // Reset hasMyMessages and myMessageCount so the scan can properly determine which chats have messages
+                    const hydratedDialogs = dialogs.map(d => ({
+                        ...d,
+                        messages: d.messages || [],
+                        hasMyMessages: undefined,
+                        myMessageCount: undefined,
+                        hasScanned: false
+                    }));
                     setChats(hydratedDialogs);
                     setLastRefresh(new Date());
 

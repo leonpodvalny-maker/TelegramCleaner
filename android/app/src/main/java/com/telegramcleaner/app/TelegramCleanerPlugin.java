@@ -14,10 +14,15 @@ public class TelegramCleanerPlugin extends Plugin {
     private static final String TAG = "TelegramCleanerPlugin";
     private TdLibHandler tdLibHandler;
 
+    public TelegramCleanerPlugin() {
+        super();
+        Log.i(TAG, "TelegramCleanerPlugin constructor called");
+    }
+
     @Override
     public void load() {
         super.load();
-        Log.d(TAG, "TelegramCleanerPlugin loaded");
+        Log.i(TAG, "TelegramCleanerPlugin.load() called - Plugin is now loaded!");
 
         // Initialize TDLib handler
         tdLibHandler = new TdLibHandler(getContext());
