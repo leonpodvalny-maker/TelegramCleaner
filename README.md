@@ -9,131 +9,115 @@ A beautiful, modern web application to clean up your Telegram messages with styl
 ## 🎯 Features
 
 - **Modern UI/UX** - Beautiful glassmorphism design with smooth animations
-- **Smart Search** - Find messages by keywords with highlighted results
-- **Bulk Selection** - Select entire chats or individual messages
+- **Real Telegram API** - Connect with your own API credentials
+- **Bulk Deletion** - Delete messages from multiple chats efficiently
 - **Message Filtering** - Search and filter messages in real-time
-- **Responsive Design** - Works seamlessly on desktop and mobile
+- **Responsive Design** - Works seamlessly on any device
 - **Dark Theme** - Easy on the eyes with a sleek dark interface
 
-## 🚀 Demo Versions
+## 🚀 Quick Start
 
-This repository includes three demo versions:
-
-1. **telegram-cleaner.html** - Original version with login flow
-2. **telegram-cleaner-modern.html** - Modern UI with glassmorphism effects (recommended)
-3. **telegram-cleaner-search.html** - Demonstrates search functionality with highlights
-
-## 📋 Prerequisites
-
-To use this app with real Telegram data, you'll need:
-
-- Telegram API credentials (API ID and API Hash)
-- Get them from: [my.telegram.org/apps](https://my.telegram.org/apps)
-
-### How to get API credentials:
-
-1. Visit [my.telegram.org/apps](https://my.telegram.org/apps)
-2. Log in with your phone number
-3. Fill in the application details (any name works)
-4. Copy your `api_id` and `api_hash`
-5. Use them in the login form
-
-## 🛠️ Installation
-
-### Quick Start (Demo Mode)
+### Local Testing
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/leonpodvalny-maker/TelegramCleaner.git
+git clone <your-repo-url>
 cd TelegramCleaner
 ```
 
-2. Open any HTML file in your browser:
+2. Install dependencies:
 ```bash
-# For the modern UI (recommended)
-open telegram-cleaner-modern.html
-
-# Or use a local server
-python -m http.server 8000
-# Then visit: http://localhost:8000/telegram-cleaner-modern.html
+npm install
 ```
 
-### For Production Use
+3. Run the app:
+```bash
+# Double-click this file (Windows):
+RUN-WEB-APP.bat
 
-**Note:** The current demo uses mock data. To connect to real Telegram API, you'll need to:
+# Or manually:
+node backend-server.js
+# Then open http://localhost:3000 in browser
+```
 
-1. Set up a backend server (Node.js, Python, etc.)
-2. Use Telegram's MTProto API or Bot API
-3. Handle authentication securely on the server side
+4. Get API credentials from [my.telegram.org/apps](https://my.telegram.org/apps)
 
-Browser-based apps cannot directly connect to Telegram's API due to security restrictions.
+5. Use the app to manage your messages!
 
-## 🎨 Features Overview
+## 🌐 Deploy to Web
 
-### Login Screen
-- Phone number input
-- Two-factor authentication (Cloud Password)
-- API credentials input with helpful instructions
+Deploy to any platform in minutes:
 
-### Main Dashboard
-- **Stats Overview** - Total chats, selected items, messages to delete
-- **Search Bar** - Real-time filtering with highlighted results
-- **Chat List** - All your conversations with message counts
-- **Expandable Messages** - Click any chat to view individual messages
-- **Bulk Actions** - Select all, deselect all, delete selected
+### Railway (Recommended)
+1. Push to GitHub
+2. Go to https://railway.app
+3. Deploy from GitHub repo
+4. Done! Get your public URL
 
-### Search Results
-- **Visual Highlights** - Matching text highlighted in gold
-- **Match Badges** - Shows number of matches per chat
-- **Smart Filtering** - Filters both chat names and message content
-- **Golden Glow** - Chats with matches have a special glow effect
+### Heroku
+```bash
+heroku create your-app
+git push heroku main
+heroku open
+```
 
-## 🖼️ Screenshots
+See **QUICKSTART.md** for detailed deployment instructions.
 
-### Main Dashboard
-Beautiful glassmorphism UI with all your chats
+## 📋 How It Works
 
-### Search Results
-Real-time search with highlighted matches
+### For Users:
+1. Visit your deployed website
+2. Get API credentials from https://my.telegram.org/apps
+3. Enter your API ID and API Hash
+4. Sign in with phone number
+5. Manage and delete Telegram messages
+6. **No installation required!**
 
-### Message Selection
-Expand chats to select individual messages
+### Architecture:
+- **Frontend**: React single-page app (telegram-cleaner-modern.html)
+- **Backend**: Node.js + Express + TDLib (backend-server.js)
+- **Database**: TDLib manages session data locally
 
-## 🔧 Technical Details
+## 🔧 Technical Stack
 
-### Built With
-- **React** 18.2.0
-- **Babel Standalone** - For JSX transformation
-- **CSS3** - Advanced animations and effects
-- **Google Fonts** - Outfit & JetBrains Mono
+- **React** 18.2.0 - UI framework
+- **TDLib** - Official Telegram client library
+- **Express** - Backend API server
+- **Node.js** - Server runtime
+- **Babel Standalone** - JSX transformation
 
-### Key Technologies
-- Glassmorphism design
-- CSS Grid & Flexbox
-- CSS Animations & Transitions
-- Gradient backgrounds
-- Custom checkboxes
-- Smooth scrolling
+## 📁 Key Files
+
+- `telegram-cleaner-modern.html` - Main UI
+- `backend-server.js` - API server with TDLib
+- `RUN-WEB-APP.bat` - Run locally (Windows)
+- `Procfile` - Deployment configuration
+- `package.json` - Dependencies
+
+## 📚 Documentation
+
+- **START-HERE.md** - Start here!
+- **QUICKSTART.md** - Fast deployment guide
+- **WEB-DEPLOYMENT-GUIDE.md** - Detailed deployment
+- **README-WEB-APP.md** - Full documentation
 
 ## ⚠️ Important Notes
 
-### Demo Mode
-The current version uses **mock data** for demonstration purposes. It does not:
-- Connect to real Telegram servers
-- Delete actual messages
-- Require real API credentials (in demo mode)
+### Security
+- Each user provides their own API credentials
+- Sessions are isolated per user
+- Use HTTPS in production (automatic on most platforms)
+- Never commit `.tdlib/` directory (contains user data)
 
-### Privacy & Security
-- Never share your API credentials publicly
-- Use environment variables for sensitive data
-- Always validate user input
-- Implement proper authentication for production
+### Privacy
+- No data is shared between users
+- All data stays on your server
+- Users control their own credentials
 
 ### Limitations
-- Cannot access groups you've left
-- Requires group membership to delete messages
-- Rate limits apply to API requests
-- Some message types may have deletion restrictions
+- Telegram API rate limits apply
+- Requires Telegram API credentials
+- Cannot access groups after leaving
 
 ## 📝 License
 
@@ -149,19 +133,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📧 Contact
-
-Leon Podvalny - [@leonpodvalny-maker](https://github.com/leonpodvalny-maker)
-
-Project Link: [https://github.com/leonpodvalny-maker/TelegramCleaner](https://github.com/leonpodvalny-maker/TelegramCleaner)
-
 ## 🙏 Acknowledgments
 
-- Telegram for their excellent messaging platform
+- Telegram for their excellent messaging platform and TDLib
 - React team for the amazing library
-- Google Fonts for beautiful typography
 - The open-source community
 
 ---
 
-**⚡ Made with passion by Leon Podvalny**
+**Made with ❤️ for the Telegram community**

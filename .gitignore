@@ -48,3 +48,7 @@ www/
 # Temporary files
 *.tmp
 .cache/
+
+# TDLib database (NEVER commit user session data!)
+.tdlib/
+dist-new/

@@ -7,8 +7,9 @@
     "start": "electron .",
     "server": "node backend-server.js",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
-    "build": "electron-builder --win portable",
-    "build-installer": "electron-builder --win"
+    "build": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win --dir",
+    "build-portable": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win portable",
+    "build-installer": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win"
   },
   "keywords": [
     "telegram",
@@ -19,7 +20,9 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^4.22.1"
+    "express": "^4.22.1",
+    "prebuilt-tdlib": "^0.1008060.0",
+    "tdl": "^8.0.2"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
@@ -29,26 +32,20 @@
   "build": {
     "appId": "com.telegramcleaner.app",
     "productName": "Telegram Cleaner",
+    "asar": true,
     "win": {
-      "target": [
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "sign": null,
-      "signingHashAlgorithms": []
-    },
-    "portable": {
-      "artifactName": "TelegramCleaner-Portable.exe"
+      "target": "dir"
     },
     "files": [
       "electron-main.js",
       "telegram-cleaner-modern.html",
       "telegram-cleaner-demo.html",
-      "backend-server.js"
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/tdl/**/*.node",
+      "node_modules/prebuilt-tdlib/**/*",
+      "node_modules/@prebuilt-tdlib/**/*"
     ],
     "directories": {
       "output": "dist"
